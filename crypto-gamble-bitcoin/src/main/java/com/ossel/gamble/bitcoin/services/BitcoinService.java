@@ -23,7 +23,7 @@ import com.ossel.gamble.core.data.Participant;
 import com.ossel.gamble.core.data.Pot;
 import com.ossel.gamble.core.data.ServiceInformation;
 import com.ossel.gamble.core.service.AbstractCryptoNetworkService;
-import com.ossel.gamble.core.utils.CoreApplicationUtil;
+import com.ossel.gamble.core.utils.CoreUtil;
 import com.ossel.gamble.core.utils.TestUtil;
 
 public abstract class BitcoinService extends AbstractCryptoNetworkService {
@@ -74,8 +74,8 @@ public abstract class BitcoinService extends AbstractCryptoNetworkService {
         }
         if (appKit == null) {
             log.info("Bitcoin wallet directory = "
-                    + CoreApplicationUtil.getWalletDirectory().getAbsolutePath());
-            appKit = new WalletAppKit(getNetworkParams(), CoreApplicationUtil.getWalletDirectory(),
+                    + CoreUtil.getWalletDirectory().getAbsolutePath());
+            appKit = new WalletAppKit(getNetworkParams(), CoreUtil.getWalletDirectory(),
                     WALLET_FILE_NAME) {
                 @Override
                 protected void onSetupCompleted() {
@@ -183,7 +183,7 @@ public abstract class BitcoinService extends AbstractCryptoNetworkService {
     }
 
     public void closeCurrentPot(Date receiveTime) {
-        currentPot.close(receiveTime, getCurrentBlockHash(), getCurrentBlockHeight());
+        CoreUtil.closePot(currentPot, receiveTime, getCurrentBlockHash(), getCurrentBlockHeight());
         closedPots.add(currentPot);
         currentPot = createNewPot();
     }

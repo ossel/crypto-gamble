@@ -143,10 +143,7 @@ public class PotComponent {
     }
 
     public Block getPayoutBlock() {
-        if (pot.getFinalPayoutBlock() != null) {
-            return pot.getFinalPayoutBlock();
-        }
-        return pot.getTmpPayoutBlock();
+        return pot.getFinalPayoutBlock();
     }
 
     public boolean isWinner() {
@@ -175,9 +172,9 @@ public class PotComponent {
 
     public String getWinnerSelectionInput() {
         if (pot.getCurrency().equals(CryptoCurrency.ETHEREUM)) {
-            return "uint(" + pot.getTmpPayoutBlock().getBlockHash() + ")";
+            return "uint(" + pot.getFinalPayoutBlock().getBlockHash() + ")";
         } else {
-            return "" + pot.getTmpPayoutBlock().getWinner();
+            return "" + pot.getFinalPayoutBlock().getWinner();
         }
     }
 }

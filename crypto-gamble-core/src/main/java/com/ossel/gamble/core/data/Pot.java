@@ -1,48 +1,45 @@
 package com.ossel.gamble.core.data;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.ossel.gamble.core.data.enums.CryptoCurrency;
-import com.ossel.gamble.core.utils.ReceiveTimeComparator;
+import com.ossel.gamble.core.utils.CoreUtil;
 
 public class Pot {
-
-    // private static final Logger log = Logger.getLogger(Pot.class);
-
-    private static final SimpleDateFormat DATE_FORMAT =
-            new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 
     public final static String LABEL_OPEN_SLOT = "open slot ";
 
     private CryptoCurrency currency;
 
-    private Date createTime = new Date();
-    private Date closingTime;
-
-    private String closingBlockHash;
-
-    private int closingBlockHeight;
-
-    private int payoutBlockOffset = 1;
-    private int payoutBlockHeight;
-
-    private String payoutTxnId;
-    private Exception payoutError;
-
-    private Block tmpPayoutBlock;
-    private Block finalPayoutBlock;
-
-    private List<Participant> participants = new ArrayList<Participant>();
-    private Participant winner;
-    private int winnerIndex = -1;
     private int expectedParticipants;
 
     private long expectedBettingAmount;
 
+    private Date createTime = new Date();
+
+    private List<Participant> participants = new ArrayList<Participant>();
+
+    private Date closingTime;
+
+    private int closingBlockHeight;
+
+    private String closingBlockHash;
+
+    private int payoutBlockHeight;
+
+    private Block finalPayoutBlock;
+
+    private String payoutTxnId;
+
     private boolean payoutStarted;
+
+    private Exception payoutError;
+
+    private Participant winner;
+
+    private int winnerIndex = -1;
 
     public Pot(CryptoCurrency currency, int expectedParticipants, long expectedBettingamount) {
         super();
@@ -98,14 +95,6 @@ public class Pot {
         return expectedParticipants * expectedBettingAmount;
     }
 
-
-    public void close(Date time, String closingBlockHash, int closingBlockHeight) {
-        this.closingTime = time;
-        this.closingBlockHash = closingBlockHash;
-        this.closingBlockHeight = closingBlockHeight;
-        this.payoutBlockHeight = this.closingBlockHeight + this.payoutBlockOffset;
-    }
-
     public int getPayoutBlockHeight() {
         return payoutBlockHeight;
     }
@@ -122,34 +111,8 @@ public class Pot {
         return participants;
     }
 
-    public Block getTmpPayoutBlock() {
-        if (finalPayoutBlock != null)
-            return finalPayoutBlock;
-        return tmpPayoutBlock;
-    }
-
-    public void setTmpPayoutBlock(Block tmpPayoutBlock) {
-        this.tmpPayoutBlock = tmpPayoutBlock;
-    }
-
     public Block getFinalPayoutBlock() {
         return finalPayoutBlock;
-    }
-
-    private Participant decideWinner(int winner) {
-        List<Participant> actualParticipants = getParticipants();
-        actualParticipants.sort(new ReceiveTimeComparator());
-        winnerIndex = winner % actualParticipants.size();
-        return actualParticipants.get(winnerIndex);
-    }
-
-    public Participant selectWinner() {
-        if (finalPayoutBlock != null) {
-            this.winner = this.decideWinner(finalPayoutBlock.getWinner());
-        } else if (tmpPayoutBlock != null) {
-            this.winner = this.decideWinner(tmpPayoutBlock.getWinner());
-        }
-        return this.winner;
     }
 
     public Participant getWinner() {
@@ -173,32 +136,7 @@ public class Pot {
     }
 
     public String getState() {
-        if (payoutTxnId != null && payoutError == null && winner != null) {
-            return "Pot closed. Winner is " + winner.getDisplayName() + ".";
-        }
-        if (payoutError != null) {
-            return "Pot closed. Winner is " + winner.getDisplayName() + ". "
-                    + payoutError.getMessage();
-        }
-
-        if (winner != null && winner.isBankParticipant()) {
-            return "Pot closed. Winner is the bank: " + winner.getPseudonym();
-        }
-
-        if (finalPayoutBlock != null && winner != null) {
-            return "Pot closed. Winner is " + winner.getDisplayName() + ". Triggering payout!";
-        }
-
-        if (tmpPayoutBlock != null && winner != null) {
-            return "Pot closed. Winner is " + winner.getDisplayName()
-                    + ". Waiting for another block to be sure before triggering payout.";
-        }
-
-        if (closingTime != null) {
-            return "Pot closed. Waiting for block " + payoutBlockHeight + " to select the winner.";
-        }
-        return "Pot open. Waiting for " + getNbrOfOpenSlots() + " more participant"
-                + (getNbrOfOpenSlots() == 1 ? "." : "s.");
+        return CoreUtil.getPotState(this);
     }
 
     public int getNbrOfOpenSlots() {
@@ -207,22 +145,6 @@ public class Pot {
 
     public int getClosingBlockHeight() {
         return closingBlockHeight;
-    }
-
-    public int getPayoutBlockOffset() {
-        return payoutBlockOffset;
-    }
-
-    @Override
-    public String toString() {
-        return "Pot [createTime=" + createTime + ", closingTime=" + closingTime
-                + ", closingBlockHash=" + closingBlockHash + ", closingBlockHeight="
-                + closingBlockHeight + ", payoutBlockOffset=" + payoutBlockOffset
-                + ", payoutBlockHeight=" + payoutBlockHeight + ", payoutTxnId=" + payoutTxnId
-                + ", payoutError=" + payoutError + ", tmpPayoutBlock=" + tmpPayoutBlock
-                + ", finalPayoutBlock=" + finalPayoutBlock + ", participants=" + participants
-                + ", winner=" + winner + ", expectedParticipants=" + expectedParticipants
-                + ", expectedBettingamount=" + expectedBettingAmount + "]";
     }
 
     public boolean payoutFinished() {
@@ -254,6 +176,14 @@ public class Pot {
         return participants.size();
     }
 
+    public void setWinnerIndex(int i) {
+        this.winnerIndex = i;
+    }
+
+    public void setWinner(Participant participant) {
+        this.winner = participant;
+    }
+
     public int getWinnerIndex() {
         return winnerIndex;
     }
@@ -277,4 +207,33 @@ public class Pot {
     public int getExpectedParticipants() {
         return expectedParticipants;
     }
+
+    public void setclosingTime(Date time) {
+        this.closingTime = time;
+    }
+
+    public void setClosingBlockHash(String closingBlockHash) {
+        this.closingBlockHash = closingBlockHash;
+    }
+
+    public void setClosingBlockHeight(int closingBlockHeight) {
+        this.closingBlockHeight = closingBlockHeight;
+    }
+
+    public void setPayoutBlockHeight(int height) {
+        payoutBlockHeight = height;
+    }
+
+    @Override
+    public String toString() {
+        return "Pot [createTime=" + createTime + ", closingTime=" + closingTime
+                + ", closingBlockHash=" + closingBlockHash + ", closingBlockHeight="
+                + closingBlockHeight + ", payoutBlockHeight=" + payoutBlockHeight + ", payoutTxnId="
+                + payoutTxnId + ", payoutError=" + payoutError + ", finalPayoutBlock="
+                + finalPayoutBlock + ", participants=" + participants + ", winner=" + winner
+                + ", expectedParticipants=" + expectedParticipants + ", expectedBettingamount="
+                + expectedBettingAmount + "]";
+    }
+
+
 }

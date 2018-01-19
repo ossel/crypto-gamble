@@ -21,7 +21,7 @@ import com.ossel.gamble.core.data.Pot;
 import com.ossel.gamble.core.data.ServiceInformation;
 import com.ossel.gamble.core.data.enums.CryptoNetwork;
 import com.ossel.gamble.core.service.AbstractCryptoNetworkService;
-import com.ossel.gamble.core.utils.CoreApplicationUtil;
+import com.ossel.gamble.core.utils.CoreUtil;
 import com.ossel.gamble.ethereum.UserConfiguration;
 import com.ossel.gamble.ethereum.services.data.CurrentBlockHash;
 import com.ossel.gamble.ethereum.services.data.CurrentBlockHeight;
@@ -174,7 +174,7 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
         if (credentials == null) {
             String walletFilename =
                     "ethereum-" + (getCryptoNetwork().isTestnet() ? "main" : "test") + ".json";
-            String pathToWallet = CoreApplicationUtil.getWalletDirectory().getAbsolutePath()
+            String pathToWallet = CoreUtil.getWalletDirectory().getAbsolutePath()
                     + File.separator + walletFilename;
             log.debug("pathToWallet=" + pathToWallet);
             try {

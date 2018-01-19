@@ -14,8 +14,7 @@ import com.ossel.gamble.bitcoin.services.BitcoinService;
 import com.ossel.gamble.core.data.Participant;
 import com.ossel.gamble.core.data.Pot;
 
-public class CoinReceivedListener extends AbstractListener
-        implements WalletCoinsReceivedEventListener {
+public class CoinReceivedListener implements WalletCoinsReceivedEventListener {
 
     private static final Logger log = Logger.getLogger(CoinReceivedListener.class);
 
@@ -27,7 +26,6 @@ public class CoinReceivedListener extends AbstractListener
 
     @Override
     public void onCoinsReceived(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
-        listenerTriggered();
         this.service.paymentReceived();
         Coin value = tx.getValueSentToMe(wallet);
         log.info("Received " + value.toFriendlyString() + " from transaction: " + tx.getHash());

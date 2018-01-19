@@ -19,12 +19,11 @@ import com.ossel.gamble.core.data.Participant;
 import com.ossel.gamble.core.data.Pot;
 import com.ossel.gamble.core.data.ServiceInformation;
 import com.ossel.gamble.core.service.AbstractCryptoNetworkService;
-import com.ossel.gamble.core.utils.CoreApplicationUtil;
+import com.ossel.gamble.core.utils.CoreUtil;
 import com.ossel.gamble.core.utils.TestUtil;
 import com.ossel.gamble.dash.ejb.DashMainEJB;
 import com.ossel.gamble.dash.listeners.CoinReceivedListener;
 import com.ossel.gamble.dash.listeners.NewBlockListener;
-import com.ossel.gamble.dash.listeners.ReorganizationListener;
 import com.ossel.gamble.dash.threads.BankThread;
 import com.ossel.gamble.dash.threads.PayoutThread;
 
@@ -65,7 +64,6 @@ public abstract class DashService extends AbstractCryptoNetworkService {
 
     private NewBlockListener newBlockListener;
 
-    private ReorganizationListener reorgListener;
 
     private BankThread bankThread;
 
@@ -88,9 +86,8 @@ public abstract class DashService extends AbstractCryptoNetworkService {
         if (appKit == null) {
 
 
-            log.info("Dash wallet directory = "
-                    + CoreApplicationUtil.getWalletDirectory().getAbsolutePath());
-            appKit = new WalletAppKit(MainNetParams.get(), CoreApplicationUtil.getWalletDirectory(),
+            log.info("Dash wallet directory = " + CoreUtil.getWalletDirectory().getAbsolutePath());
+            appKit = new WalletAppKit(MainNetParams.get(), CoreUtil.getWalletDirectory(),
                     WALLET_FILE_NAME) {
                 @Override
                 protected void onSetupCompleted() {
@@ -139,8 +136,6 @@ public abstract class DashService extends AbstractCryptoNetworkService {
             coinReceivedListener = new CoinReceivedListener(this);
             appKit.wallet().addCoinsReceivedEventListener(coinReceivedListener);
 
-            reorgListener = new ReorganizationListener();
-            appKit.chain().addReorganizeListener(reorgListener);
             BankThread bankThread = new BankThread(this);
             bankThread.start();
 
@@ -202,7 +197,7 @@ public abstract class DashService extends AbstractCryptoNetworkService {
     }
 
     public void closeCurrentPot(Date receiveTime) {
-        currentPot.close(receiveTime, getCurrentBlockHash(), getCurrentBlockHeight());
+        CoreUtil.closePot(currentPot, receiveTime, getCurrentBlockHash(), getCurrentBlockHeight());
         closedPots.add(currentPot);
         currentPot = createNewPot();
     }

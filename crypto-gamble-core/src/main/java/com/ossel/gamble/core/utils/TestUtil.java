@@ -46,9 +46,9 @@ public class TestUtil {
         }
     }
 
-    public static void addTestData1(final CryptoNetwork network,
-            final long EXPECTED_BETTING_AMOUNT, final List<Participant> possibleParticipants,
-            final Pot currentPot, final List<Pot> closedPots) {
+    public static void addTestData1(final CryptoNetwork network, final long EXPECTED_BETTING_AMOUNT,
+            final List<Participant> possibleParticipants, final Pot currentPot,
+            final List<Pot> closedPots) {
         String address = getSampleAddress(network);
         Participant p = new Participant(address.substring(0, address.length() - 7) + "D3pos1t",
                 address.substring(0, address.length() - 6) + "P4yout");
@@ -70,7 +70,7 @@ public class TestUtil {
             possibleParticipants.add(cp);
             pot.addParticipant(cp);
         }
-        pot.close(new Date(), getSampleBlockhash(network), 755174);
+        CoreUtil.closePot(pot, new Date(), getSampleBlockhash(network), 755174);
         closedPots.add(pot);
         try {
             Thread.sleep(100);// because creation time will be the id of the pot. Prevents id
@@ -87,7 +87,7 @@ public class TestUtil {
             possibleParticipants.add(cp);
             pot2.addParticipant(cp);
         }
-        pot2.close(new Date(), getSampleBlockhash(network), 755170);
+        CoreUtil.closePot(pot, new Date(), getSampleBlockhash(network), 755170);
         closedPots.add(pot2);
     }
 

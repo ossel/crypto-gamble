@@ -11,6 +11,7 @@ import com.ossel.gamble.core.data.Block;
 import com.ossel.gamble.core.data.Participant;
 import com.ossel.gamble.core.data.Pot;
 import com.ossel.gamble.core.data.enums.CryptoCurrency;
+import com.ossel.gamble.core.utils.CoreUtil;
 import com.ossel.gamble.ethereum.UserConfiguration;
 import com.ossel.gamble.ethereum.data.EthPot;
 import com.ossel.gamble.ethereum.generated.TrustlessGambling;
@@ -57,7 +58,6 @@ public class PotService extends ExpiryCacheValue {
                         int winner = fetchWinner(contract);
                         String payoutBlockhash = fetchPayoutBlockhash(contract);
                         Block block = new Block(payoutBlockhash, winner);
-                        pot.setTmpPayoutBlock(block);
                         pot.setFinalPayoutBlock(block);
                         pot.setMessage("Payout done.");
                         closedPots.add(pot);
@@ -84,7 +84,7 @@ public class PotService extends ExpiryCacheValue {
                         if (pot.isFull()) {
                             log.info("Pot full. Fetch payoutblocknumber.");
                             pot.setMessage("call payout()");
-                            pot.close(new Date(), "not accessible",
+                            CoreUtil.closePot(pot, new Date(), "not accessible",
                                     getClosingBlocknumber(contract));
                         }
                     }

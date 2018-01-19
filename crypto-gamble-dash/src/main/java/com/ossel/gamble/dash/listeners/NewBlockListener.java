@@ -7,12 +7,14 @@ import org.bitcoinj.core.VerificationException;
 import org.bitcoinj.core.listeners.NewBestBlockListener;
 import org.bitcoinj.store.BlockStoreException;
 import com.google.common.util.concurrent.Service.State;
+import com.ossel.gamble.core.data.Block;
 import com.ossel.gamble.core.data.ExtendedBlock;
 import com.ossel.gamble.core.data.Participant;
 import com.ossel.gamble.core.data.Pot;
+import com.ossel.gamble.core.utils.CoreUtil;
 import com.ossel.gamble.dash.services.DashService;
 
-public class NewBlockListener extends AbstractListener implements NewBestBlockListener {
+public class NewBlockListener implements NewBestBlockListener {
     private static final Logger log = Logger.getLogger(NewBlockListener.class);
 
     DashService dashService;
@@ -27,7 +29,6 @@ public class NewBlockListener extends AbstractListener implements NewBestBlockLi
 
     @Override
     public void notifyNewBestBlock(StoredBlock block) throws VerificationException {
-        listenerTriggered();
         log.info("notifyNewBestBlock getHeight()=" + block.getHeight() + " hash="
                 + block.getHeader().getHash().toString());
 
@@ -48,8 +49,9 @@ public class NewBlockListener extends AbstractListener implements NewBestBlockLi
             } else {
                 if (block.getHeight() == pot.getPayoutBlockHeight()) {
                     log.info("Pot " + pot.getCreateTime().getTime() + " select tmp Winner.");
-                    pot.setTmpPayoutBlock(new ExtendedBlock(block.getHeader().getHash().toString()));
-                    pot.selectWinner();
+                    Block b = new ExtendedBlock(block.getHeader().getHash().toString());
+                    pot.setFinalPayoutBlock(b);
+                    CoreUtil.selectWinner(pot, b);
                 } else {
                     log.info("Pot " + pot.getCreateTime().getTime() + " select final Winner.");
                     log.info("back in time to payout block " + pot.getPayoutBlockHeight());
@@ -74,9 +76,9 @@ public class NewBlockListener extends AbstractListener implements NewBestBlockLi
                         log.info("Found correct block to select winner:"
                                 + (prev.getHeight() == pot.getPayoutBlockHeight()));
                         if (prev.getHeight() == pot.getPayoutBlockHeight()) {
-                            pot.setFinalPayoutBlock(
-                                    new ExtendedBlock(prev.getHeader().getHash().toString()));
-                            Participant winner = pot.selectWinner();
+                            Block b = new ExtendedBlock(block.getHeader().getHash().toString());
+                            pot.setFinalPayoutBlock(b);
+                            Participant winner = CoreUtil.selectWinner(pot, b);
                             log.info(winner.getDisplayName()
                                     + " has been selected as a winner of pot " + pot.getId()
                                     + " by the blockchain.");
