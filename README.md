@@ -1,2 +1,3 @@
-# crypto-gamble
-Crypto Gambling Platform
+# crypto-gamble: Trustless Gambling Platform
+===================================
+This prototype was created during my master thesis.
