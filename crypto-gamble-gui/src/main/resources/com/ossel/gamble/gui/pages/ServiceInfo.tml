@@ -1,0 +1,10 @@
+<html t:type="layout" title="Service Info"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
+	<head>
+		<link rel="stylesheet" type="text/css" href="${asset:context:/css/main.css}"/>
+	</head>
+	
+	<div t:type="Loop" t:source="infoList" t:value="info">
+		<p>${info}</p>
+	</div>
+</html>

@@ -1,0 +1,14 @@
+<html t:type="layout" title="Not found iota-gui"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="row">
+        <div class="span12">
+            <h1>Requested page not found!</h1>
+            <t:actionlink t:id="demoWallet">Demo Wallet</t:actionlink>
+            <t:actionlink t:id="gamble">Trustless Gamble Web Application</t:actionlink>
+            <t:DonationButton id="donateWithDash" />
+        </div>
+    </div>
+
+</html>

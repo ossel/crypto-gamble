@@ -1,0 +1,48 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<div id="pot">
+		<h3>${pot.state}
+			<t:if test="${pot.payoutTxnId}">
+				<a href="${explorerLinkToTxn}" target="_blank">Payout triggered!</a>
+			</t:if>
+		</h3>
+		<div class="leftPot">
+			<img class="${pieChartClass}" src="${chart3}"/>
+		</div>
+		<div class="rightPot">
+			<t:if test="${pot.winner}">
+				<p class="pLeft firstPLeft">Winner calculation: <span title="Last digit of the payout blockhash. The payout blockhash was unknown when the pot closed. That is why the block hash can be used for the randomenss of the winner selection."><strong>${winnerSelectionInput}</strong></span>  modulo <span title="Number of participants."><strong>${pot.nbrOfParticipants}</strong></span> = <span title="The winner is (${pot.winnerIndex}) with the payout address: ${pot.winner.payoutAddress}"><strong>(${pot.winnerIndex})</strong></span> (hover for explanations)</p>
+			</t:if>
+			<t:if test="closed">
+				<table>
+					<tr>
+						<th></th>
+						<th>Block Height</th>
+						<th>Block Hash</th>
+					</tr>
+	 				<tr>
+						<td>Payout</td>
+						<td><a href="${explorerLink}" target="_blank">${pot.payoutBlockHeight}</a></td>
+						<td><t:BlockComponent block="prop:payoutBlock" /></td>
+					</tr>
+					<tr>
+						<td>Closing</td>
+						<td><a href="${explorerLink}" target="_blank">${pot.closingBlockHeight}</a></td>
+						<td><a href="${explorerLinkClosingBlockHash}" target="_blank">${pot.closingBlockHash}</a></td>
+					</tr>
+				</table>
+			</t:if>
+			<h6>Participants:</h6>
+			<p t:type="Loop" t:source="participants" t:value="participant">
+				<t:if test="${noBankParticipant}">
+					<t:ParticipantComponent index="prop:participantIndex" participant="prop:participant" winner="prop:winner"/>
+					<p:else>
+						<t:BankParticipantComponent index="prop:participantIndex" participant="prop:participant" winner="prop:winner"/>
+					</p:else>
+				</t:if>
+			</p>
+			<t:if test="noParticipants">
+				<p>No one joined this pot yet. You could be the first participant.</p>
+			</t:if>
+		</div>
+	</div>
+</t:container>

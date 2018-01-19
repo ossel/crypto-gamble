@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>crypto-gamble</artifactId>
+		<groupId>com.ossel</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>crypto-gamble-dash</artifactId>
+	<packaging>jar</packaging>
+	<name>Crypto Gambling DASH</name>
+	
+	<dependencies>
+	
+		<dependency>
+			<groupId>org.dashj</groupId>
+			<artifactId>dashj-core</artifactId>
+			<version>0.14.4.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.ossel</groupId>
+			<artifactId>crypto-gamble-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		
+	</dependencies>
+
+</project>

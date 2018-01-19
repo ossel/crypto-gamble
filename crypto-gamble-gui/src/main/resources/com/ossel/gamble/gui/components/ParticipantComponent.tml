@@ -1,0 +1,25 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<p class="${cssClass}">
+		<img class="icon_ok" src="${asset:context:images/icon_ok.png}"
+	                 alt="TXN accepted" title="TXN accepted"/>
+		<t:if test="${index}">
+		(${index}) 
+		</t:if>
+		
+		<t:if test="ethereum">
+			<p>Smart contract received <strong>${participant.receivedAmount}</strong> WEI from address <a class="color_${index}" href="${explorerLinkToDepositAddress}" target="_blank">${participant.depositAddress}</a>.</p>
+				<t:if test="${participant.payoutAddress}">
+					<p>Payout address: <a href="${explorerLinkToPayoutAddress}" target="_blank">${participant.payoutAddress}</a></p>
+				</t:if>
+			<p:else>
+				<t:if test="${participant.pseudonym}">
+				${participant.pseudonym} 
+				</t:if>
+				: Deposit address <a class="color_${index}" href="${explorerLinkToDepositAddress}" target="_blank">${participant.depositAddress}</a> received <strong>${participant.receivedAmount}</strong>${currencyCode}
+				<t:if test="${participant.payoutAddress}">
+					Payout address: <a href="${explorerLinkToPayoutAddress}" target="_blank">${participant.payoutAddress}</a>
+				</t:if>
+			</p:else>
+		</t:if>
+	</p>
+</t:container>

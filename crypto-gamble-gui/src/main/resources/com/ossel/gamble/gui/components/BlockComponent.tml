@@ -1,0 +1,15 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	
+	<t:if test="showPayoutHash">
+		<t:if test="extendedBlock">
+			<a href="${explorerLink}" target="_blank">${prefix}<strong>${block.winner}</strong>${suffix}</a>
+			<p:else>
+				<a href="${explorerLink}" target="_blank">${block.blockhash}</a>
+			</p:else>
+		</t:if>
+		
+		<p:else>
+			<div class="tbd">?</div>
+		</p:else>
+	</t:if>
+</t:container>

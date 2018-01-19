@@ -1,0 +1,12 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<p class="${cssClass}">
+		<img class="icon_ok" src="${asset:context:images/icon_ok_bank.png}"
+	                 alt="This is a participant from the bank. The slot amount has been locked by the bank." title="This is a participant from the bank. The slot amount has been locked by the bank."/>
+		<t:if test="${index}">
+		(${index}) 
+		</t:if>
+		<t:if test="${participant.pseudonym}">
+		Bank: ${pseudonymWithSpaces} 
+		</t:if>
+	</p>
+</t:container>

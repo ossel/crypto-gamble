@@ -1,0 +1,23 @@
+<html t:type="layout" title="DASH - Trustless Gambling"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">  
+    <head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				window.setInterval(function(){$(".hidden_refresh_button").click()}, 10000);
+			});
+		</script>
+	</head>
+    <div class="container">
+		<t:zone t:id="payoutsZone">
+			<p>Last updated: ${time}</p>
+			<div t:type="Loop" t:source="pots" t:value="pot">
+				<h2>${pot.id}</h2>
+				<p>${pot.payoutTxnId}</p>
+				<p>${pot.payoutError}</p>
+			</div>
+		</t:zone>
+		<t:eventlink class="hidden_refresh_button" t:id="updatelink" event="update" zone="payoutsZone">Update</t:eventlink>
+		
+    </div>
+</html>

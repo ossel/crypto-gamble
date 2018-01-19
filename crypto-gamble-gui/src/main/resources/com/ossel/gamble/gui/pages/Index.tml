@@ -1,0 +1,158 @@
+<html t:type="layout" title="${cryptoNetwork.cryptocurrency.fullName} Gambling"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				window.setInterval(function(){$(".updateData").click()}, 11000);
+				window.setInterval(function(){
+					var possible = "0123456789ABCDEF??????????";$(".tbd").html(
+						"0000000000000"
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+					)
+					
+				}, 0.2*1000);
+			});
+		</script>
+		<link rel="stylesheet" type="text/css" href="${asset:context:/css/main.css}"/>
+		<link rel="stylesheet" type="text/css" href="${asset:context:/css}/custom/${cryptoNetwork.cryptocurrency.code}.css"/>
+	</head>
+    <header>
+    	<t:zone t:id="blockchainDataZone">
+	    	<div id="blockchainData">
+				<p>Bock Height: <a href="${cryptoNetwork.explorerLink}" target="_blank"><strong>${currentBockHeight}</strong></a> Bock Hash: <a href="${currentBockHashExplorerLink}" target="_blank"><strong>${currentBockHash}</strong></a></p>
+				<p>${time}: <strong>${price}</strong>&euro; / ${cryptoNetwork.cryptocurrency.code}</p>
+			</div>
+		</t:zone>
+        <div class="logoP">
+	        <p><img src="${asset:context:images/logos}/${cryptoNetwork.cryptocurrency.code}.png" alt="${cryptoNetwork.cryptocurrency.fullName}" title="${cryptoNetwork.cryptocurrency.fullName}"/></p>
+            <p>${cryptoNetwork.networkName}</p>
+        </div>
+        <div id="slogan">
+        	<p>Master Thesis Prototype</p>
+        		
+        		<!-- <div title="All payments are recorded on the blockchain. The random generator that selects a winner is the blockchain! You dont have to trust this website." alt="Trustless">
+        			<img src="${asset:context:images/icon_check.png}" /> Trustless
+		        </div>
+		        <div title="Nobody can prohibit you from gambling" alt="Permissionless">
+	        		<img src="${asset:context:images/icon_check.png}" /> Permissionless
+	        	</div>
+	        	<div title="The dash network allows instant payment confirmations." alt="Instant">
+			        <img src="${asset:context:images/icon_check.png}" /> Instant
+		        </div> -->
+        </div>
+    </header>
+    <div class="container">
+		
+		<div id="pots">
+			<t:zone t:id="openPotZone">	
+				<p>Last refresh: ${time}</p>
+				<div class="container">
+				    <div class="row">
+				        <div class="span12">
+				            <t:alerts/>
+				        </div>
+				    </div>
+				</div>
+				<t:if test="showDeposits">
+					<div id="deposits">
+						<h3>My deposits:</h3>
+						<p t:type="Loop" t:source="myDeposits" t:value="deposit">
+							<t:DepositComponent participant="deposit" />
+						</p>
+					</div>
+				</t:if>
+				<div id="currentPot">
+					<t:PotComponent pot="prop:currentPot" />
+					<t:actionlink t:id="joinPot">Join Pot</t:actionlink>
+				</div>
+			</t:zone>
+			<t:if test="showPaymentForm">
+				<div id="paymentDetails">
+					<div id="qrcode">
+						<img src="${currentReceivingAddressLink}" alt="qrcode"></img>
+					</div> 
+					
+					<t:form t:id="addPayoutAddress" class="${cryptoNetwork.cryptoCurrency}">
+						<p>Send <strong>${currentPot.expectedBettingAmount}</strong> ${cryptoNetwork.cryptoCurrency.smallestDenomination} to <strong><a href="${linkToDepositAddress}" target="_blank">${depositAddress}</a></strong> to participate in the current pot.</p>
+						<t:if test="!ethereum">
+							<t:textfield t:id="pseudonym" class="input-block-level" placeholder="pseudonym (optional)"/>
+							<t:textfield t:id="payoutAddress" class="input-block-level" placeholder="${cryptoNetwork.cryptocurrency.fullName} payout address (optional)"/>
+						</t:if>
+						<t:if test="ethereum">
+							<t:textarea t:id="smartContractAbi" class="input-block-level" placeholder="Smart contract ABI (Application Binary Interface)"/>
+						</t:if>
+						<t:submit class="btn btn-large btn-primary" value="${submitLabel}"/>
+					</t:form>
+					
+				</div>
+			</t:if>
+				
+			<t:zone t:id="closedPotsZone">
+				<t:if test="showClosedPots">
+					<h3 class="centred">Closed Pots</h3>
+				</t:if>
+				<div id="closedPots">
+					<div t:type="Loop" t:source="closedPots" t:value="closedPot">
+						<t:PotComponent pot="prop:closedPot" />
+					</div>
+				</div>
+			</t:zone>
+		</div>
+		<!--<h4>Update buttons</h4>  class="updateData"  
+		<t:eventlink t:id="updatelink" event="updateTxn" zone="txnZone">Update</t:eventlink>
+		<t:eventlink t:id="updatelink2" event="updateBlockchainData" zone="blockchainDataZone">Update blockchaindata</t:eventlink>
+		<t:eventlink t:id="updatelink3" event="updateOpenPot" zone="openPotZone">Update open pot</t:eventlink>
+		<t:actionlink t:id="refresh">Refresh All</t:actionlink>
+		 -->
+		<t:eventlink class="updateData" t:id="updatelink" event="updateClosedPots" zone="closedPotsZone">Update</t:eventlink>
+		<t:eventlink class="updateData" t:id="updatelink2" event="updateBlockchainData" zone="blockchainDataZone">Update blockchaindata</t:eventlink>
+		<t:eventlink class="updateData" t:id="updatelink3" event="updateOpenPot" zone="openPotZone">Update open pot</t:eventlink>
+    </div>
+</html>

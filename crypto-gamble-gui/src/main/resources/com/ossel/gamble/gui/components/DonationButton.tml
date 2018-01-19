@@ -1,0 +1,7 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+
+	<div id="donation">
+		<t:actionlink t:id="donateButton"><img src="${asset:context:images/donate_minimal_normal.png}" alt="donate" title="donate"/></t:actionlink>
+	</div>
+	
+</t:container>

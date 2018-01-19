@@ -1,0 +1,23 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	
+	<t:if test="pending">
+		<img src="${asset:context:images/icon_pending.png}"
+	                 alt="TXN pending" title="TXN pending"/>
+	</t:if>
+	
+	<t:if test="!pending">
+		<img src="${asset:context:images/icon_ok.png}"
+	                 alt="TXN accepted" title="TXN accepted"/>
+	</t:if>
+		
+	<p>
+		<t:if test="${participant.pseudonym}">
+		${participant.pseudonym}:
+		</t:if>
+		
+		Deposit address <a href="${explorerLinkToDepositAddress}" target="_blank">${participant.depositAddress}</a> received <strong>${participant.receivedAmount}</strong>!
+		<t:if test="${participant.payoutAddress}">
+			Payout address: <a href="${explorerLinkToPayoutAddress}" target="_blank">${participant.payoutAddress}</a>
+		</t:if>
+	</p>
+</t:container>
