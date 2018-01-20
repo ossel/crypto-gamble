@@ -30,7 +30,7 @@ public class CoreUtil {
             return "Pot closed. Winner is the bank: " + pot.getWinner().getPseudonym();
         }
 
-        if (pot.getFinalPayoutBlock() != null && pot.getWinner() != null) {
+        if (pot.getPayoutBlock() != null && pot.getWinner() != null) {
             return "Pot closed. Winner is " + pot.getWinner().getDisplayName()
                     + ". Triggering payout!";
         }

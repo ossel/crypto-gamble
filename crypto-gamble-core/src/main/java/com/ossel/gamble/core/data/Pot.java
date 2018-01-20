@@ -29,7 +29,7 @@ public class Pot {
 
     private int payoutBlockHeight;
 
-    private Block finalPayoutBlock;
+    private Block payoutBlock;
 
     private String payoutTxnId;
 
@@ -111,8 +111,8 @@ public class Pot {
         return participants;
     }
 
-    public Block getFinalPayoutBlock() {
-        return finalPayoutBlock;
+    public Block getPayoutBlock() {
+        return payoutBlock;
     }
 
     public Participant getWinner() {
@@ -155,23 +155,6 @@ public class Pot {
         return createTime.getTime();
     }
 
-    public Integer getIndex(Participant participant) {
-        for (int i = 0; i < participants.size(); i++) {
-            if (participant.isBankParticipant()) {
-                if (participant.getReceiveTime().equals(participants.get(i).getReceiveTime())) {
-                    return i;
-                }
-            } else {
-                if (participant.getDepositAddress()
-                        .equals(participants.get(i).getDepositAddress())) {
-                    return i;
-                }
-            }
-
-        }
-        return null;
-    }
-
     public int getNbrOfParticipants() {
         return participants.size();
     }
@@ -188,8 +171,8 @@ public class Pot {
         return winnerIndex;
     }
 
-    public void setFinalPayoutBlock(Block finalPayoutBlock) {
-        this.finalPayoutBlock = finalPayoutBlock;
+    public void setPayoutBlock(Block payoutBlock) {
+        this.payoutBlock = payoutBlock;
     }
 
     public boolean isEmpty() {
@@ -229,8 +212,8 @@ public class Pot {
         return "Pot [createTime=" + createTime + ", closingTime=" + closingTime
                 + ", closingBlockHash=" + closingBlockHash + ", closingBlockHeight="
                 + closingBlockHeight + ", payoutBlockHeight=" + payoutBlockHeight + ", payoutTxnId="
-                + payoutTxnId + ", payoutError=" + payoutError + ", finalPayoutBlock="
-                + finalPayoutBlock + ", participants=" + participants + ", winner=" + winner
+                + payoutTxnId + ", payoutError=" + payoutError + ", finalPayoutBlock=" + payoutBlock
+                + ", participants=" + participants + ", winner=" + winner
                 + ", expectedParticipants=" + expectedParticipants + ", expectedBettingamount="
                 + expectedBettingAmount + "]";
     }

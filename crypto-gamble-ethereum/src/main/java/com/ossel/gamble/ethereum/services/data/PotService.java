@@ -58,7 +58,7 @@ public class PotService extends ExpiryCacheValue {
                         int winner = fetchWinner(contract);
                         String payoutBlockhash = fetchPayoutBlockhash(contract);
                         Block block = new Block(payoutBlockhash, winner);
-                        pot.setFinalPayoutBlock(block);
+                        pot.setPayoutBlock(block);
                         pot.setMessage("Payout done.");
                         closedPots.add(pot);
                         // new pot opened
@@ -72,6 +72,7 @@ public class PotService extends ExpiryCacheValue {
                             String payoutAddress = getPayoutAddress(contract, i);
                             if (payoutAddress != null && depositAddress != null) {
                                 Participant p = new Participant(depositAddress, payoutAddress);
+                                p.setPotIndex(i);
                                 p.setReceivedAmount(
                                         UserConfiguration.CONTRACT_EXPECTED_BETTING_AMOUNT);
                                 pot.addParticipant(p);

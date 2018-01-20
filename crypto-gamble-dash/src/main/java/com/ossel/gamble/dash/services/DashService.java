@@ -293,6 +293,7 @@ public abstract class DashService extends AbstractCryptoNetworkService {
         log.info("Add bank participant " + bankParticipant + " to the current pot.");
         paymentReceived();
         possibleParticipants.add(bankParticipant);
+        bankParticipant.setPotIndex(currentPot.getNbrOfParticipants());
         currentPot.addParticipant(bankParticipant);
         if (currentPot.isFull()) {
             this.closeCurrentPot(new Date());

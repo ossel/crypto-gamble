@@ -50,7 +50,7 @@ public class NewBlockListener implements NewBestBlockListener {
                 if (block.getHeight() == pot.getPayoutBlockHeight()) {
                     log.info("Pot " + pot.getCreateTime().getTime() + " select tmp Winner.");
                     Block b = new ExtendedBlock(block.getHeader().getHash().toString());
-                    pot.setFinalPayoutBlock(b);
+                    pot.setPayoutBlock(b);
                     CoreUtil.selectWinner(pot, b);
                 } else {
                     log.info("Pot " + pot.getCreateTime().getTime() + " select final Winner.");
@@ -77,7 +77,7 @@ public class NewBlockListener implements NewBestBlockListener {
                                 + (prev.getHeight() == pot.getPayoutBlockHeight()));
                         if (prev.getHeight() == pot.getPayoutBlockHeight()) {
                             Block b = new ExtendedBlock(block.getHeader().getHash().toString());
-                            pot.setFinalPayoutBlock(b);
+                            pot.setPayoutBlock(b);
                             Participant winner = CoreUtil.selectWinner(pot, b);
                             log.info(winner.getDisplayName()
                                     + " has been selected as a winner of pot " + pot.getId()

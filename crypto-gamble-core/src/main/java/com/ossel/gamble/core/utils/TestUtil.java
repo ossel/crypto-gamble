@@ -55,6 +55,7 @@ public class TestUtil {
         p.setPseudonym(network.getCryptoCurrency().getShortName() + "TestUser");
         p.setReceivedAmount(EXPECTED_BETTING_AMOUNT);
         possibleParticipants.add(p);
+        p.setPotIndex(currentPot.getNbrOfParticipants());
         currentPot.addParticipant(p);
         try {
             Thread.sleep(100); // creation time will be the id of the pot. Prevents id collisions.

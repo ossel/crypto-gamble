@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Participant {
 
+    private int potIndex; // starting from 0
     private String pseudonym;
     private String depositAddress;
     private String payoutAddress;
@@ -14,8 +15,17 @@ public class Participant {
 
     public Participant(String depositAddress, String payoutAddress) {
         super();
+        potIndex = -1; // not in the pot yet
         this.depositAddress = depositAddress;
         this.payoutAddress = payoutAddress;
+    }
+
+    public int getPotIndex() {
+        return potIndex;
+    }
+
+    public void setPotIndex(int potIndex) {
+        this.potIndex = potIndex;
     }
 
     public String getPseudonym() {

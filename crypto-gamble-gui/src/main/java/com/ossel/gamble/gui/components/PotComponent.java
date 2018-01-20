@@ -135,7 +135,7 @@ public class PotComponent {
     }
 
     public Integer getParticipantIndex() {
-        return pot.getIndex(participant);
+        return participant.getPotIndex();
     }
 
     public boolean isClosed() {
@@ -143,11 +143,11 @@ public class PotComponent {
     }
 
     public Block getPayoutBlock() {
-        return pot.getFinalPayoutBlock();
+        return pot.getPayoutBlock();
     }
 
     public boolean isWinner() {
-        return pot.getWinnerIndex() == getParticipantIndex();
+        return pot.getWinnerIndex() == participant.getPotIndex();
     }
 
     public String getPieChartClass() {
@@ -172,9 +172,9 @@ public class PotComponent {
 
     public String getWinnerSelectionInput() {
         if (pot.getCurrency().equals(CryptoCurrency.ETHEREUM)) {
-            return "uint(" + pot.getFinalPayoutBlock().getBlockHash() + ")";
+            return "uint(" + pot.getPayoutBlock().getBlockHash() + ")";
         } else {
-            return "" + pot.getFinalPayoutBlock().getWinner();
+            return "" + pot.getPayoutBlock().getWinner();
         }
     }
 }
