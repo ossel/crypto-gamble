@@ -63,56 +63,43 @@
 		<link rel="stylesheet" type="text/css" href="${asset:context:/css/main.css}"/>
 		<link rel="stylesheet" type="text/css" href="${asset:context:/css}/custom/${cryptoNetwork.cryptocurrency.code}.css"/>
 	</head>
+	<t:zone t:id="dataZone">
     <header>
-    	<t:zone t:id="blockchainDataZone">
-	    	<div id="blockchainData">
-				<p>Bock Height: <a href="${cryptoNetwork.explorerLink}" target="_blank"><strong>${currentBockHeight}</strong></a> Bock Hash: <a href="${currentBockHashExplorerLink}" target="_blank"><strong>${currentBockHash}</strong></a></p>
-				<p>${time}: <strong>${price}</strong>&euro; / ${cryptoNetwork.cryptocurrency.code}</p>
-			</div>
-		</t:zone>
+    	<div id="blockchainData">
+			<p>Bock Height: <a href="${cryptoNetwork.explorerLink}" target="_blank"><strong>${currentBockHeight}</strong></a> Bock Hash: <a href="${currentBockHashExplorerLink}" target="_blank"><strong>${currentBockHash}</strong></a></p>
+			<p>${time}: <strong>${price}</strong>&euro; / ${cryptoNetwork.cryptocurrency.code}</p>
+		</div>
         <div class="logoP">
 	        <p><img src="${asset:context:images/logos}/${cryptoNetwork.cryptocurrency.code}.png" alt="${cryptoNetwork.cryptocurrency.fullName}" title="${cryptoNetwork.cryptocurrency.fullName}"/></p>
             <p>${cryptoNetwork.networkName}</p>
         </div>
         <div id="slogan">
         	<p>Master Thesis Prototype</p>
-        		
-        		<!-- <div title="All payments are recorded on the blockchain. The random generator that selects a winner is the blockchain! You dont have to trust this website." alt="Trustless">
-        			<img src="${asset:context:images/icon_check.png}" /> Trustless
-		        </div>
-		        <div title="Nobody can prohibit you from gambling" alt="Permissionless">
-	        		<img src="${asset:context:images/icon_check.png}" /> Permissionless
-	        	</div>
-	        	<div title="The dash network allows instant payment confirmations." alt="Instant">
-			        <img src="${asset:context:images/icon_check.png}" /> Instant
-		        </div> -->
         </div>
     </header>
     <div class="container">
 		
 		<div id="pots">
-			<t:zone t:id="openPotZone">	
-				<p>Last refresh: ${time}</p>
-				<div class="container">
-				    <div class="row">
-				        <div class="span12">
-				            <t:alerts/>
-				        </div>
-				    </div>
+			<p>Last refresh: ${time}</p>
+			<div class="container">
+			    <div class="row">
+			        <div class="span12">
+			            <t:alerts/>
+			        </div>
+			    </div>
+			</div>
+			<t:if test="showDeposits">
+				<div id="deposits">
+					<h3>My deposits:</h3>
+					<p t:type="Loop" t:source="myDeposits" t:value="deposit">
+						<t:DepositComponent participant="deposit" />
+					</p>
 				</div>
-				<t:if test="showDeposits">
-					<div id="deposits">
-						<h3>My deposits:</h3>
-						<p t:type="Loop" t:source="myDeposits" t:value="deposit">
-							<t:DepositComponent participant="deposit" />
-						</p>
-					</div>
-				</t:if>
-				<div id="currentPot">
-					<t:PotComponent pot="prop:currentPot" />
-					<t:actionlink t:id="joinPot">Join Pot</t:actionlink>
-				</div>
-			</t:zone>
+			</t:if>
+			<div id="currentPot">
+				<t:PotComponent pot="prop:currentPot" />
+				<t:actionlink t:id="joinPot">Join Pot</t:actionlink>
+			</div>
 			<t:if test="showPaymentForm">
 				<div id="paymentDetails">
 					<div id="qrcode">
@@ -134,7 +121,7 @@
 				</div>
 			</t:if>
 				
-			<t:zone t:id="closedPotsZone">
+			
 				<t:if test="showClosedPots">
 					<h3 class="centred">Closed Pots</h3>
 				</t:if>
@@ -143,16 +130,9 @@
 						<t:PotComponent pot="prop:closedPot" />
 					</div>
 				</div>
-			</t:zone>
-		</div>
-		<!--<h4>Update buttons</h4>  class="updateData"  
-		<t:eventlink t:id="updatelink" event="updateTxn" zone="txnZone">Update</t:eventlink>
-		<t:eventlink t:id="updatelink2" event="updateBlockchainData" zone="blockchainDataZone">Update blockchaindata</t:eventlink>
-		<t:eventlink t:id="updatelink3" event="updateOpenPot" zone="openPotZone">Update open pot</t:eventlink>
-		<t:actionlink t:id="refresh">Refresh All</t:actionlink>
-		 -->
-		<t:eventlink class="updateData" t:id="updatelink" event="updateClosedPots" zone="closedPotsZone">Update</t:eventlink>
-		<t:eventlink class="updateData" t:id="updatelink2" event="updateBlockchainData" zone="blockchainDataZone">Update blockchaindata</t:eventlink>
-		<t:eventlink class="updateData" t:id="updatelink3" event="updateOpenPot" zone="openPotZone">Update open pot</t:eventlink>
+			
+		<t:eventlink class="updateData" t:id="updatelink" event="updateDataZone" zone="dataZone">Update</t:eventlink>
+    	</div>
     </div>
+    </t:zone>
 </html>

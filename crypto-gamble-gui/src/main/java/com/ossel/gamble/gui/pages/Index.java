@@ -135,28 +135,12 @@ public class Index {
 
 
     @Component
-    private Zone closedPotsZone;
+    private Zone dataZone;
 
-    public Block onUpdateClosedPots() {
-        log.debug("onUpdateClosedPots");
+    public Block onUpdateDataZone() {
+        log.debug("onUpdateDataZone");
         updateNewBlockAlerts();
-        return closedPotsZone.getBody();
-    }
-
-    @Component
-    private Zone blockchainDataZone;
-
-    public Block onUpdateBlockchainData() {
-        log.debug("onUpdateBlockchainData");
-        return blockchainDataZone.getBody();
-    }
-
-    @Component
-    private Zone openPotZone;
-
-    public Block onUpdateOpenPot() {
-        log.debug("onUpdateOpenPot");
-        return openPotZone.getBody();
+        return dataZone.getBody();
     }
 
     public String getTime() {
