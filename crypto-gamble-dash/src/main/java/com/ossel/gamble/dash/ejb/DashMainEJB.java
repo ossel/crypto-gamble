@@ -15,4 +15,5 @@ public class DashMainEJB extends DashService {
     public CryptoNetwork getCryptoNetwork() {
         return CryptoNetwork.DASH_MAIN;
     }
+
 }

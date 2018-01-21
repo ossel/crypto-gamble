@@ -22,9 +22,6 @@ public class ParticipantComponent {
     private Participant participant;
 
     @Parameter(required = false)
-    private Integer index;
-
-    @Parameter(required = false)
     private boolean winner;
 
     public String getExplorerLinkToDepositAddress() {
@@ -44,11 +41,7 @@ public class ParticipantComponent {
     }
 
     public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
+        return participant.getPotIndex();
     }
 
     public String getCssClass() {
@@ -63,7 +56,7 @@ public class ParticipantComponent {
     }
 
     public String getCurrencyCode() {
-        return service.getCryptoNetwork().getCryptoCurrency().getCode();
+        return service.getCryptoNetwork().getCryptoCurrency().getSmallestDenomination();
     }
 
 

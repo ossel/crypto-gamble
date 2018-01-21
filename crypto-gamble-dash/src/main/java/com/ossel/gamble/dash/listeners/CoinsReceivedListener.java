@@ -1,4 +1,4 @@
-package com.ossel.gamble.bitcoin.listeners;
+package com.ossel.gamble.dash.listeners;
 
 import java.util.Date;
 import java.util.List;
@@ -10,30 +10,30 @@ import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.wallet.Wallet;
 import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
-import com.ossel.gamble.bitcoin.services.BitcoinService;
 import com.ossel.gamble.core.data.Participant;
 import com.ossel.gamble.core.data.Pot;
 import com.ossel.gamble.core.utils.CoreUtil;
+import com.ossel.gamble.dash.services.DashService;
 
-public class CoinReceivedListener implements WalletCoinsReceivedEventListener {
+public class CoinsReceivedListener implements WalletCoinsReceivedEventListener {
 
-    private static final Logger log = Logger.getLogger(CoinReceivedListener.class);
+    private static final Logger log = Logger.getLogger(CoinsReceivedListener.class);
 
-    private BitcoinService service;
+    private DashService dashService;
 
-    public CoinReceivedListener(BitcoinService dashService) {
-        this.service = dashService;
+    public CoinsReceivedListener(DashService dashService2) {
+        this.dashService = dashService2;
     }
 
     @Override
     public void onCoinsReceived(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
-        this.service.paymentReceived();
+        this.dashService.paymentReceived();
         Coin value = tx.getValueSentToMe(wallet);
         log.info("Received " + value.toFriendlyString() + " from transaction: " + tx.getHash());
         log.debug("Transaction details: " + tx.toString());
-        Pot currentPot = service.getCurrentPot();
-        List<Participant> possibleParticipants = service.getPossibleParticipants();
-        WalletAppKit appkit = service.getAppKit();
+        Pot currentPot = dashService.getCurrentPot();
+        List<Participant> possibleParticipants = dashService.getPossibleParticipants();
+        WalletAppKit appkit = dashService.getAppKit();
         for (TransactionOutput transactionOutput : tx.getOutputs()) {
             for (Participant p : possibleParticipants) {
                 String depositAddress = p.getDepositAddress();
@@ -52,12 +52,12 @@ public class CoinReceivedListener implements WalletCoinsReceivedEventListener {
                         log.info("Setting payout address to input address: " + fromAddress);
                         p.setPayoutAddress(fromAddress);
                     }
-
+                    p.setPotIndex(currentPot.getNbrOfParticipants());
                     currentPot.addParticipant(p);
                     log.info(
                             "Received " + value.toFriendlyString() + " coins from " + p.toString());
                     if (currentPot.isFull()) {
-                        service.closeCurrentPot(receiveTime);
+                        dashService.closeCurrentPot(receiveTime);
                         log.info("Pot" + currentPot.getCreateTime().getTime()
                                 + " was full and has been closed.");
                     }
@@ -65,7 +65,6 @@ public class CoinReceivedListener implements WalletCoinsReceivedEventListener {
             }
 
         }
-
         currentPot.setState(CoreUtil.getPotState(currentPot));
 
     }

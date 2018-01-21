@@ -14,7 +14,7 @@ import org.bitcoinj.params.AbstractBitcoinNetParams;
 import org.bitcoinj.wallet.KeyChain.KeyPurpose;
 import com.google.common.util.concurrent.Service;
 import com.google.common.util.concurrent.Service.State;
-import com.ossel.gamble.bitcoin.listeners.CoinReceivedListener;
+import com.ossel.gamble.bitcoin.listeners.CoinsReceivedListener;
 import com.ossel.gamble.bitcoin.listeners.NewBlockListener;
 import com.ossel.gamble.bitcoin.listeners.ReorganizationListener;
 import com.ossel.gamble.bitcoin.threads.BankThread;
@@ -47,7 +47,7 @@ public abstract class BitcoinService extends AbstractCryptoNetworkService {
 
     private static final long EXPECTED_BETTING_AMOUNT = 100000L;
 
-    private CoinReceivedListener coinReceivedListener;
+    private CoinsReceivedListener coinReceivedListener;
     private NewBlockListener newBlockListener;
 
     private ReorganizationListener reorgListener;
@@ -118,7 +118,7 @@ public abstract class BitcoinService extends AbstractCryptoNetworkService {
             } else {
                 log.error("Faild to add NewBestBlockListener to appKit");
             }
-            coinReceivedListener = new CoinReceivedListener(this);
+            coinReceivedListener = new CoinsReceivedListener(this);
             appKit.wallet().addCoinsReceivedEventListener(coinReceivedListener);
 
             reorgListener = new ReorganizationListener();
@@ -148,7 +148,8 @@ public abstract class BitcoinService extends AbstractCryptoNetworkService {
             String payoutAddress) {
         for (Participant p : possibleParticipants) {
             if (p.getDepositAddress().equals(depositAddress)) {
-                p.setPayoutAddress(payoutAddress);
+                if (payoutAddress != null && !payoutAddress.isEmpty())
+                    p.setPayoutAddress(payoutAddress);
                 p.setPseudonym(pseudonym);
             }
         }
@@ -186,18 +187,6 @@ public abstract class BitcoinService extends AbstractCryptoNetworkService {
         CoreUtil.closePot(currentPot, receiveTime, getCurrentBlockHash(), getCurrentBlockHeight());
         closedPots.add(currentPot);
         currentPot = createNewPot();
-    }
-
-    private Pot createNewPot() {
-        if (Math.random() > 0.3) {
-            return new Pot(getCryptoNetwork().getCryptoCurrency(), 5, EXPECTED_BETTING_AMOUNT);
-        } else {
-            // if (Math.random() > 0.7) {
-            // return new Pot(getCryptoNetwork(),10, EXPECTED_BETTING_AMOUNT);
-            // } else {
-            return new Pot(getCryptoNetwork().getCryptoCurrency(), 2, EXPECTED_BETTING_AMOUNT);
-            // }
-        }
     }
 
     public List<Pot> getClosedPots() {
@@ -286,23 +275,10 @@ public abstract class BitcoinService extends AbstractCryptoNetworkService {
             log.info("Pot" + currentPot.getCreateTime().getTime()
                     + " is full because a bank participant has been joined.");
         }
+        currentPot.setState(CoreUtil.getPotState(currentPot));
 
     }
 
-    private String getBankPseudonym() {
-        switch (currentPot.getNbrOfOpenSlots()) {
-            case 1:
-                return "David Rockefeller";
-            case 2:
-                return "Mario Draghi";
-            case 3:
-                return "Janet Yellen";
-            case 4:
-                return "Helicopter Ben";
-            default:
-                return "Helicopter Ben";
-        }
-    }
 
     public Date getLastParticipantJoinTime() {
         return lastParticipantJoin;
@@ -336,6 +312,11 @@ public abstract class BitcoinService extends AbstractCryptoNetworkService {
     @Override
     public String getSmartContractABI() {
         return "";// not applicable for bitcoin
+    }
+
+    @Override
+    public long getExpectedBettingAmount() {
+        return EXPECTED_BETTING_AMOUNT;
     }
 
 }

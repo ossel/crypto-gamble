@@ -10,7 +10,7 @@
 		</div>
 		<div class="rightPot">
 			<t:if test="${pot.winner}">
-				<p class="pLeft firstPLeft">Winner calculation: <span title="Last digit of the payout blockhash. The payout blockhash was unknown when the pot closed. That is why the block hash can be used for the randomenss of the winner selection."><strong>${winnerSelectionInput}</strong></span>  modulo <span title="Number of participants."><strong>${pot.nbrOfParticipants}</strong></span> = <span title="The winner is (${pot.winnerIndex}) with the payout address: ${pot.winner.payoutAddress}"><strong>(${pot.winnerIndex})</strong></span> (hover for explanations)</p>
+				<p class="pLeft firstPLeft">Winner calculation: <span title="${blockHashDescription}"><strong>${winnerSelectionInput}</strong></span>  modulo <span title="Number of participants."><strong>${pot.nbrOfParticipants}</strong></span> = <span title="The winner is (${pot.winnerIndex}) with the payout address: ${pot.winner.payoutAddress}"><strong>(${pot.winnerIndex})</strong></span> (hover for explanations)</p>
 			</t:if>
 			<t:if test="closed">
 				<table>
@@ -34,9 +34,9 @@
 			<h6>Participants:</h6>
 			<p t:type="Loop" t:source="participants" t:value="participant">
 				<t:if test="${noBankParticipant}">
-					<t:ParticipantComponent index="prop:participantIndex" participant="prop:participant" winner="prop:winner"/>
+					<t:ParticipantComponent participant="prop:participant" winner="prop:winner"/>
 					<p:else>
-						<t:BankParticipantComponent index="prop:participantIndex" participant="prop:participant" winner="prop:winner"/>
+						<t:BankParticipantComponent participant="prop:participant" winner="prop:winner"/>
 					</p:else>
 				</t:if>
 			</p>

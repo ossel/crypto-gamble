@@ -15,7 +15,7 @@
 				<t:if test="${participant.pseudonym}">
 				${participant.pseudonym} 
 				</t:if>
-				: Deposit address <a class="color_${index}" href="${explorerLinkToDepositAddress}" target="_blank">${participant.depositAddress}</a> received <strong>${participant.receivedAmount}</strong>${currencyCode}
+				: Deposit address <a class="color_${index}" href="${explorerLinkToDepositAddress}" target="_blank">${participant.depositAddress}</a> received <strong>${participant.receivedAmount}</strong> ${currencyCode}.
 				<t:if test="${participant.payoutAddress}">
 					Payout address: <a href="${explorerLinkToPayoutAddress}" target="_blank">${participant.payoutAddress}</a>
 				</t:if>

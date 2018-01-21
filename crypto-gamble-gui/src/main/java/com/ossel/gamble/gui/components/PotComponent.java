@@ -140,10 +140,6 @@ public class PotComponent {
         return getParticipants().size() == 0;
     }
 
-    public Integer getParticipantIndex() {
-        return participant.getPotIndex();
-    }
-
     public boolean isClosed() {
         return pot.isFull();
     }
@@ -177,10 +173,20 @@ public class PotComponent {
     }
 
     public String getWinnerSelectionInput() {
-        if (pot.getCurrency().equals(CryptoCurrency.ETHEREUM)) {
+        if (isEthereum()) {
             return "uint(" + pot.getPayoutBlock().getBlockHash() + ")";
         } else {
             return "" + pot.getPayoutBlock().getWinner();
         }
+    }
+
+    private boolean isEthereum() {
+        return pot.getCurrency().equals(CryptoCurrency.ETHEREUM);
+    }
+
+    public String getBlockHashDescription() {
+        return isEthereum()
+                ? "The smart contract converts the payout blockhash to an integer value. The payout blockhash was unknown when the pot closed. That is why this really big number can be used for the randomenss of the winner selection."
+                : "Last digit of the payout blockhash. The payout blockhash was unknown when the pot closed. That is why the block hash can be used for the randomenss of the winner selection.";
     }
 }

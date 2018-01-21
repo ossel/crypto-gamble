@@ -22,7 +22,7 @@ import com.ossel.gamble.core.service.AbstractCryptoNetworkService;
 import com.ossel.gamble.core.utils.CoreUtil;
 import com.ossel.gamble.core.utils.TestUtil;
 import com.ossel.gamble.dash.ejb.DashMainEJB;
-import com.ossel.gamble.dash.listeners.CoinReceivedListener;
+import com.ossel.gamble.dash.listeners.CoinsReceivedListener;
 import com.ossel.gamble.dash.listeners.NewBlockListener;
 import com.ossel.gamble.dash.threads.BankThread;
 import com.ossel.gamble.dash.threads.PayoutThread;
@@ -60,7 +60,7 @@ public abstract class DashService extends AbstractCryptoNetworkService {
     private List<Participant> possibleParticipants = new ArrayList<Participant>();
 
 
-    private CoinReceivedListener coinReceivedListener;
+    private CoinsReceivedListener coinReceivedListener;
 
     private NewBlockListener newBlockListener;
 
@@ -133,7 +133,7 @@ public abstract class DashService extends AbstractCryptoNetworkService {
             } else {
                 log.error("Faild to add NewBestBlockListener to appKit");
             }
-            coinReceivedListener = new CoinReceivedListener(this);
+            coinReceivedListener = new CoinsReceivedListener(this);
             appKit.wallet().addCoinsReceivedEventListener(coinReceivedListener);
 
             BankThread bankThread = new BankThread(this);
@@ -162,7 +162,8 @@ public abstract class DashService extends AbstractCryptoNetworkService {
             String payoutAddress) {
         for (Participant p : possibleParticipants) {
             if (p.getDepositAddress().equals(depositAddress)) {
-                p.setPayoutAddress(payoutAddress);
+                if (payoutAddress != null && !payoutAddress.isEmpty())
+                    p.setPayoutAddress(payoutAddress);
                 p.setPseudonym(pseudonym);
             }
         }
@@ -198,20 +199,9 @@ public abstract class DashService extends AbstractCryptoNetworkService {
 
     public void closeCurrentPot(Date receiveTime) {
         CoreUtil.closePot(currentPot, receiveTime, getCurrentBlockHash(), getCurrentBlockHeight());
+        currentPot.setState(CoreUtil.getPotState(currentPot));
         closedPots.add(currentPot);
         currentPot = createNewPot();
-    }
-
-    private Pot createNewPot() {
-        if (Math.random() > 0.3) {
-            return new Pot(getCryptoNetwork().getCryptoCurrency(), 5, EXPECTED_BETTING_AMOUNT);
-        } else {
-            if (Math.random() > 0.7) {
-                return new Pot(getCryptoNetwork().getCryptoCurrency(), 10, EXPECTED_BETTING_AMOUNT);
-            } else {
-                return new Pot(getCryptoNetwork().getCryptoCurrency(), 2, EXPECTED_BETTING_AMOUNT);
-            }
-        }
     }
 
     public List<Pot> getClosedPots() {
@@ -300,22 +290,7 @@ public abstract class DashService extends AbstractCryptoNetworkService {
             log.info("Pot" + currentPot.getCreateTime().getTime()
                     + " is full because a bank participant has been joined.");
         }
-
-    }
-
-    private String getBankPseudonym() {
-        switch (currentPot.getNbrOfOpenSlots()) {
-            case 1:
-                return "David Rockefeller";
-            case 2:
-                return "Mario Draghi";
-            case 3:
-                return "Janet Yellen";
-            case 4:
-                return "Helicopter Ben";
-            default:
-                return "Helicopter Ben";
-        }
+        currentPot.setState(CoreUtil.getPotState(currentPot));
     }
 
     public Date getLastParticipantJoinTime() {
@@ -351,5 +326,10 @@ public abstract class DashService extends AbstractCryptoNetworkService {
     @Override
     public String getSmartContractABI() {
         return "";// not applicable for dash
+    }
+
+    @Override
+    public long getExpectedBettingAmount() {
+        return EXPECTED_BETTING_AMOUNT;
     }
 }
