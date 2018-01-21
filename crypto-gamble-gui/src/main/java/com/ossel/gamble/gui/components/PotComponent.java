@@ -55,12 +55,16 @@ public class PotComponent {
     @Inject
     private ComponentResources _resources;
 
+    @Property
+    private int lastNbrOfParticipants;
+
     public String getExplorerLink() {
         return service.getCryptoNetwork().getExplorerLink();
     }
 
     public Link getChart3() {
-        return _resources.createEventLink("chart", new Object[] {pot.getId(), "600", "400"});
+        return _resources.createEventLink("chart",
+                new Object[] {pot.getId(), "600", "400", pot.getNbrOfParticipants()});
     }
 
     @SetupRender
@@ -70,7 +74,9 @@ public class PotComponent {
         }
     }
 
-    public StreamResponse onChart(final long potId, final int width, final int height) {
+    public StreamResponse onChart(final long potId, final int width, final int height,
+            final int nbrOfPlayers) {
+        log.info(potId + " - " + nbrOfPlayers);
         PieDataset pieDataset = null;
         String chartTitle = "Pot";
         if (pot == null) {

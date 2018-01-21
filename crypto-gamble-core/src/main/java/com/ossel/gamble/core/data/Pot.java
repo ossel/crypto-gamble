@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.ossel.gamble.core.data.enums.CryptoCurrency;
-import com.ossel.gamble.core.utils.CoreUtil;
 
 public class Pot {
 
@@ -40,6 +39,8 @@ public class Pot {
     private Participant winner;
 
     private int winnerIndex = -1;
+
+    private String state;
 
     public Pot(CryptoCurrency currency, int expectedParticipants, long expectedBettingamount) {
         super();
@@ -136,8 +137,14 @@ public class Pot {
     }
 
     public String getState() {
-        return CoreUtil.getPotState(this);
+        return state;
     }
+
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
 
     public int getNbrOfOpenSlots() {
         return (expectedParticipants - getParticipants().size());
@@ -159,12 +166,15 @@ public class Pot {
         return participants.size();
     }
 
-    public void setWinnerIndex(int i) {
-        this.winnerIndex = i;
+    public void setWinner(int winnerIndex) {
+        this.winnerIndex = winnerIndex;
+        this.winner = participants.get(winnerIndex);
+
     }
 
     public void setWinner(Participant participant) {
         this.winner = participant;
+        this.winnerIndex = participant.getPotIndex();
     }
 
     public int getWinnerIndex() {

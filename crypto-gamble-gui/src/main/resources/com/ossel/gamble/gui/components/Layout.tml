@@ -16,8 +16,8 @@
 	<hr />
 	
 	<footer>
-	    <p>&copy; ossel 2017</p>
-	    <t:DonationButton id="donateWithDash" />
+	    <p>&copy; ossel 2018</p>
+	    <!-- <t:DonationButton id="donateWithDash" /> -->
 	</footer>
 
 </body>

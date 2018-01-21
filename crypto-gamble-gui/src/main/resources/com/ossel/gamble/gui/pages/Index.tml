@@ -6,8 +6,76 @@
 			$(document).ready(function(){
 				window.setInterval(function(){$(".updateData").click()}, 11000);
 				window.setInterval(function(){
-					var possible = "0123456789ABCDEF??????????";$(".tbd").html(
+					var possible = "0123456789ABCDEF??????????";
+					$(".tbd").html(
 						"0000000000000"
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+					)
+					
+				}, 0.2*1000);
+				window.setInterval(function(){
+					var possible = "0123456789abcdef??????????";
+					$(".tbd_eth").html(
+						"0x"
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
+						+possible.charAt(Math.floor(Math.random() * possible.length))
 						+possible.charAt(Math.floor(Math.random() * possible.length))
 						+possible.charAt(Math.floor(Math.random() * possible.length))
 						+possible.charAt(Math.floor(Math.random() * possible.length))
@@ -63,24 +131,33 @@
 		<link rel="stylesheet" type="text/css" href="${asset:context:/css/main.css}"/>
 		<link rel="stylesheet" type="text/css" href="${asset:context:/css}/custom/${cryptoNetwork.cryptocurrency.code}.css"/>
 	</head>
-	<t:zone t:id="dataZone">
-    <header>
-    	<div id="blockchainData">
-			<p>Bock Height: <a href="${cryptoNetwork.explorerLink}" target="_blank"><strong>${currentBockHeight}</strong></a> Bock Hash: <a href="${currentBockHashExplorerLink}" target="_blank"><strong>${currentBockHash}</strong></a></p>
-			<p>${time}: <strong>${price}</strong>&euro; / ${cryptoNetwork.cryptocurrency.code}</p>
+	
+	
+	<t:zone t:id="headerZone">
+		<div id="blockchainData">
+			<!--  <p>Bock Height: <a href="${cryptoNetwork.explorerLink}" target="_blank"><strong>${currentBockHeight}</strong></a> Bock Hash: <a href="${currentBockHashExplorerLink}" target="_blank"><strong>${currentBockHash}</strong></a></p>-->
+			<p>Bock Height: <a href="${cryptoNetwork.explorerLink}" target="_blank"><strong>${currentBockHeight}</strong></a>&nbsp;&nbsp;&nbsp; <strong>${price}</strong>&euro; / ${cryptoNetwork.cryptocurrency.code}&nbsp;&nbsp;&nbsp; ${time}</p>
 		</div>
-        <div class="logoP">
-	        <p><img src="${asset:context:images/logos}/${cryptoNetwork.cryptocurrency.code}.png" alt="${cryptoNetwork.cryptocurrency.fullName}" title="${cryptoNetwork.cryptocurrency.fullName}"/></p>
-            <p>${cryptoNetwork.networkName}</p>
-        </div>
-        <div id="slogan">
-        	<p>Master Thesis Prototype</p>
-        </div>
+	 </t:zone>
+	
+	
+	<header>
+	        <div class="logoP">
+		        <p><img src="${asset:context:images/logos}/${cryptoNetwork.cryptocurrency.code}.png" alt="${cryptoNetwork.cryptocurrency.fullName}" title="${cryptoNetwork.cryptocurrency.fullName}"/></p>
+	            <p>${cryptoNetwork.networkName}</p>
+	        </div>
+	        <div id="slogan">
+	        	<p>Master Thesis Prototype</p>
+	        </div>
     </header>
+    
+
+	 
+	<t:zone t:id="dataZone">
+    
     <div class="container">
 		
 		<div id="pots">
-			<p>Last refresh: ${time}</p>
 			<div class="container">
 			    <div class="row">
 			        <div class="span12">
@@ -131,7 +208,8 @@
 					</div>
 				</div>
 			
-		<t:eventlink class="updateData" t:id="updatelink" event="updateDataZone" zone="dataZone">Update</t:eventlink>
+		<t:eventlink class="updateData" t:id="updatelink" event="updateDataZone" zone="dataZone">Update Data Zone</t:eventlink>
+		<t:eventlink class="updateData" t:id="updatelink2" event="updateHeaderZone" zone="headerZone">Update Header Zone</t:eventlink>
     	</div>
     </div>
     </t:zone>

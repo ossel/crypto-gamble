@@ -9,7 +9,7 @@
 		</t:if>
 		
 		<p:else>
-			<div class="tbd">?</div>
+			<div class="${toBeDecidedClass}">?</div>
 		</p:else>
 	</t:if>
 </t:container>

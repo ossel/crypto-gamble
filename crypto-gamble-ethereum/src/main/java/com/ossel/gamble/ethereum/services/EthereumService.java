@@ -61,7 +61,7 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
         log.info("blockHash=" + blockHash.getValue());
         gasPrice = new GasPrice(getWeb3jService(), getCredentials());
         log.info("gasPrice=" + gasPrice.getValue().intValue());
-        potService = new PotService(getWeb3jService(), getCredentials(), gasPrice,
+        potService = new PotService(getWeb3jService(), getCredentials(), gasPrice, blockHight,
                 UserConfiguration.CONTRACT_ADDRESS);
         log.info("currentPot=" + potService.getValue().toString());
     }
@@ -174,8 +174,8 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
         if (credentials == null) {
             String walletFilename =
                     "ethereum-" + (getCryptoNetwork().isTestnet() ? "main" : "test") + ".json";
-            String pathToWallet = CoreUtil.getWalletDirectory().getAbsolutePath()
-                    + File.separator + walletFilename;
+            String pathToWallet = CoreUtil.getWalletDirectory().getAbsolutePath() + File.separator
+                    + walletFilename;
             log.debug("pathToWallet=" + pathToWallet);
             try {
                 credentials = WalletUtils.loadCredentials(UserConfiguration.WALLET_CREDENTIAL,

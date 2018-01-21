@@ -51,17 +51,6 @@ public class Index {
     @Persist
     private String smartContractAbi;
 
-
-    /**
-     * current block data
-     */
-    @Property
-    @Persist
-    private String currentBockHash;
-    @Property
-    @Persist
-    private int currentBockHeight;
-
     @Property
     @Persist
     private Participant deposit;
@@ -93,8 +82,6 @@ public class Index {
     public void setupPage() {
 
         updateNewBlockAlerts();
-        currentBockHash = service.getCurrentBlockHash();
-        currentBockHeight = service.getCurrentBlockHeight();
         if (myDeposits == null) {
             myDeposits = new ArrayList<Participant>();
         }
@@ -104,12 +91,20 @@ public class Index {
 
     }
 
+    public String getCurrentBockHash() {
+        return service.getCurrentBlockHash();
+    }
+
+    public int getCurrentBockHeight() {
+        return service.getCurrentBlockHeight();
+    }
+
     public String getLinkToDepositAddress() {
         return network.getExplorerLinkToAddress(depositAddress);
     }
 
     public String getCurrentBockHashExplorerLink() {
-        return getCryptoNetwork().getExplorerLinkToBlock(currentBockHash);
+        return getCryptoNetwork().getExplorerLinkToBlock(getCurrentBockHash());
     }
 
     private void updateNewBlockAlerts() {
@@ -139,8 +134,17 @@ public class Index {
 
     public Block onUpdateDataZone() {
         log.debug("onUpdateDataZone");
-        updateNewBlockAlerts();
+        // updateNewBlockAlerts();
         return dataZone.getBody();
+    }
+
+    @Component
+    private Zone headerZone;
+
+    public Block onUpdateHeaderZone() {
+        log.debug("onUpdateHeaderZone");
+        updateNewBlockAlerts();
+        return headerZone.getBody();
     }
 
     public String getTime() {
@@ -230,5 +234,16 @@ public class Index {
     public boolean isShowClosedPots() {
         return getClosedPots().size() > 0;
     }
+    //
+    // public String getPossibleBlockHashValues() {
+    // final String values = "0123456789ABCDEF??????????";
+    // return isEthereum() ? values.toLowerCase() : values;
+    // }
+    //
+    // public String getPossibleBlockHashPrefix() {
+    // return isEthereum() ? "0x0?0?0?0?0?0?0?" : "0000000000000";
+    // }
+
+
 
 }

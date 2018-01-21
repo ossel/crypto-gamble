@@ -9,7 +9,7 @@ import org.web3j.protocol.core.methods.response.EthBlockNumber;
 public class CurrentBlockHeight extends ExpiryCacheValue {
 
     public CurrentBlockHeight(Web3j web3j, Credentials credentials) {
-        super(web3j, credentials, 5 * SECOND);
+        super(web3j, credentials, SECOND);
     }
 
     @Override

@@ -88,9 +88,8 @@ public class NewBlockListener implements NewBestBlockListener {
                     }
                     log.info("found correct closing block");
                 }
-
+                pot.setState(CoreUtil.getPotState(pot));
             }
-
             service.startPayoutBatch();
         }
 

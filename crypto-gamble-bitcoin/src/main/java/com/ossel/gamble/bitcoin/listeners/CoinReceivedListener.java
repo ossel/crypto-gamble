@@ -13,6 +13,7 @@ import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
 import com.ossel.gamble.bitcoin.services.BitcoinService;
 import com.ossel.gamble.core.data.Participant;
 import com.ossel.gamble.core.data.Pot;
+import com.ossel.gamble.core.utils.CoreUtil;
 
 public class CoinReceivedListener implements WalletCoinsReceivedEventListener {
 
@@ -64,6 +65,8 @@ public class CoinReceivedListener implements WalletCoinsReceivedEventListener {
             }
 
         }
+
+        currentPot.setState(CoreUtil.getPotState(currentPot));
 
     }
 

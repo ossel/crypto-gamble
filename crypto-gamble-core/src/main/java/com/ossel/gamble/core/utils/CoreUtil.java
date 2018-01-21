@@ -63,7 +63,7 @@ public class CoreUtil {
     public static Participant selectWinner(Pot pot, Block finalPayoutBlock) {
         List<Participant> actualParticipants = pot.getParticipants();
         actualParticipants.sort(new ReceiveTimeComparator());
-        pot.setWinnerIndex(finalPayoutBlock.getWinner() % actualParticipants.size());
+        pot.setWinner(finalPayoutBlock.getWinner() % actualParticipants.size());
         pot.setWinner(actualParticipants.get(pot.getWinnerIndex()));
         return pot.getWinner();
     }

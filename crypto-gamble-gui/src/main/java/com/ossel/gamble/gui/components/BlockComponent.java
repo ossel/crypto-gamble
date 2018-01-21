@@ -8,6 +8,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import com.ossel.gamble.core.data.Block;
 import com.ossel.gamble.core.data.ExtendedBlock;
+import com.ossel.gamble.core.data.enums.CryptoCurrency;
 import com.ossel.gamble.core.service.CryptoNetworkService;
 
 /**
@@ -25,7 +26,7 @@ public class BlockComponent {
 
 
     public String getExplorerLink() {
-        return service.getCryptoNetwork().getExplorerLink();
+        return service.getCryptoNetwork().getExplorerLinkToBlock(block.getBlockHash());
     }
 
     public boolean isShowPayoutHash() {
@@ -43,4 +44,13 @@ public class BlockComponent {
     public String getPrefix() {
         return ((ExtendedBlock) block).getPrefix();
     }
+
+    public boolean isEthereum() {
+        return CryptoCurrency.ETHEREUM.equals(service.getCryptoNetwork().getCryptoCurrency());
+    }
+
+    public String getToBeDecidedClass() {
+        return isEthereum() ? "tbd_eth" : "tbd";
+    }
+
 }
