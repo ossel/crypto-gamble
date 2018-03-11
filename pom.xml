@@ -14,6 +14,7 @@
 		<module>crypto-gamble-ethereum</module>
 		<module>crypto-gamble-gui</module>
 
+		<module>crypto-hash-distribution</module>
 	</modules>
 
 	<properties>
