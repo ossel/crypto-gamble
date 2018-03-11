@@ -2,7 +2,6 @@ package com.ossel.gamble.gui.services;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import javax.naming.InitialContext;
@@ -128,11 +127,6 @@ public class CryptoServiceImpl implements CryptoNetworkService {
     public void updatePossibleParticipants(String depositAddress, String pseudonym,
             String payoutAddress) {
         lookupService().updatePossibleParticipants(depositAddress, pseudonym, payoutAddress);
-    }
-
-    @Override
-    public Date getLastParticipantJoinTime() {
-        return lookupService().getLastParticipantJoinTime();
     }
 
     @Override

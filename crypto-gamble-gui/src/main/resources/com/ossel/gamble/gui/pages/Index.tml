@@ -146,9 +146,6 @@
 		        <p><img src="${asset:context:images/logos}/${cryptoNetwork.cryptocurrency.code}.png" alt="${cryptoNetwork.cryptocurrency.fullName}" title="${cryptoNetwork.cryptocurrency.fullName}"/></p>
 	            <p>${cryptoNetwork.networkName}</p>
 	        </div>
-	        <div id="slogan">
-	        	<p>Master Thesis Prototype</p>
-	        </div>
     </header>
     
 
@@ -184,15 +181,16 @@
 					</div> 
 					
 					<t:form t:id="addPayoutAddress" class="${cryptoNetwork.cryptoCurrency}">
-						<p>Send <strong>${currentPot.expectedBettingAmount}</strong> ${cryptoNetwork.cryptoCurrency.smallestDenomination} to <strong><a href="${linkToDepositAddress}" target="_blank">${depositAddress}</a></strong> to participate in the current pot.</p>
+						<p class="payDescription">Send <strong>${currentPot.expectedBettingAmount}</strong> ${cryptoNetwork.cryptoCurrency.smallestDenomination} to <strong><a href="${linkToDepositAddress}" target="_blank">${depositAddress}</a></strong> to participate in the current pot.</p>
 						<t:if test="!ethereum">
 							<t:textfield t:id="pseudonym" class="input-block-level" placeholder="pseudonym (optional)"/>
-							<t:textfield t:id="payoutAddress" class="input-block-level" placeholder="${cryptoNetwork.cryptocurrency.fullName} payout address (optional)"/>
+							<!-- <t:textfield t:id="payoutAddress" class="input-block-level" placeholder="${cryptoNetwork.cryptocurrency.fullName} payout address (optional)"/> -->
 						</t:if>
 						<t:if test="ethereum">
+							<p>Smart contract ABI:</p>
 							<t:textarea t:id="smartContractAbi" class="input-block-level" placeholder="Smart contract ABI (Application Binary Interface)"/>
 						</t:if>
-						<t:submit class="btn btn-large btn-primary" value="${submitLabel}"/>
+						<t:submit class="btn btn-large btn-primary" value="Close"/>
 					</t:form>
 					
 				</div>

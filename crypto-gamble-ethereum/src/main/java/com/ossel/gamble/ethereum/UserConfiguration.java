@@ -2,7 +2,7 @@ package com.ossel.gamble.ethereum;
 
 public class UserConfiguration {
 
-    public static final String API_KEY = "enter_your_key";// TODO https://docs.web3j.io/infura.html
+    public static final String API_KEY = "ul2g5BJ8PD56zjlXUdQu";// https://docs.web3j.io/infura.html
 
     public static final String WALLET_CREDENTIAL = "changeit";
 

@@ -91,10 +91,12 @@ public class Participant {
         this.bankParticipant = bankParticipant;
     }
 
+
+
     @Override
     public String toString() {
         return "Participant [depositAddress=" + depositAddress + ", payoutAddress=" + payoutAddress
-                + ", receivedAmount=" + receivedAmount + " duffs, receiveTime=" + receiveTime + "]";
+                + ", receivedAmount=" + receivedAmount + ", receiveTime=" + receiveTime + "]";
     }
 
 }

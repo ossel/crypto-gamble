@@ -73,6 +73,7 @@ public abstract class DashService extends AbstractCryptoNetworkService {
     private void start() {
         log.info("#### " + DashMainEJB.class.getSimpleName() + " ####");
         currentPot = new Pot(getCryptoNetwork().getCryptoCurrency(), 2, EXPECTED_BETTING_AMOUNT);
+        currentPot.setState(CoreUtil.getPotState(currentPot));
         if (DEVELOPMENT_MODE)
             TestUtil.addTestData1(getCryptoNetwork(), EXPECTED_BETTING_AMOUNT, possibleParticipants,
                     currentPot, closedPots);

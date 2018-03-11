@@ -1,4 +1,42 @@
 body {
-    background-color: #ffffb7;
+    background-color: #f2f2f2;
     padding: 0;
+}
+
+#pots > div#paymentDetails {
+    border: 2px solid #F8A33B;
+}
+
+#pots div#pot {
+    border: 4px solid #F8A33B;
+}
+
+#currentPot > a {
+    background: #F8A33B none repeat scroll 0 0;
+}
+
+#currentPot > a:hover {
+    background: #F8A33B none repeat scroll 0 0;
+}
+
+.logoP > p:nth-child(2) {
+    width: 50%;
+    color: #F8A33B;
+    text-decoration: underline;
+    font-size: 2em;
+    line-height: 2.2em;
+}
+
+div.logoP p {
+    width: 42%;
+}
+
+.btn-primary {
+    background-color: #F8A33B;
+    border-color: #F8A33B;
+}
+
+.btn-primary:hover {
+    background-color: #F8A33B;
+    border-color: #F8A33B;
 }

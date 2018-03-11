@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,8 +28,13 @@ public class CryptoPriceServiceEjb {
 
     public final static long REFRESH_THRESHOLD = 60000; // msec
 
+    /**
+     * show max 2 digits after decimal point
+     */
+    NumberFormat formatter = new DecimalFormat("##.##");;
+
     private Map<CryptoCurrency, Long> lastRefresh;
-    private Map<CryptoCurrency, String> priceCash;
+    private Map<CryptoCurrency, Double> priceCash;
 
     public CryptoPriceServiceEjb() {
         lastRefresh = new HashMap<>();
@@ -36,7 +43,7 @@ public class CryptoPriceServiceEjb {
         cal.add(Calendar.DAY_OF_MONTH, -1);
         for (CryptoCurrency c : CryptoCurrency.values()) {
             lastRefresh.put(c, cal.getTime().getTime());
-            priceCash.put(c, "");
+            priceCash.put(c, -1.0);
         }
     }
 
@@ -73,9 +80,9 @@ public class CryptoPriceServiceEjb {
 
     public String getPrice(CryptoCurrency currency) {
         if (System.currentTimeMillis() - lastRefresh.get(currency) > REFRESH_THRESHOLD) {
-            String price = "error";
+            double price = 0.0;
             try {
-                price = fetchPriceData(currency).getString(PRICE_EUR);
+                price = Double.valueOf(fetchPriceData(currency).getString(PRICE_EUR));
             } catch (RuntimeException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -84,8 +91,7 @@ public class CryptoPriceServiceEjb {
             priceCash.put(currency, price);
         }
 
-        return priceCash.get(currency);
-
+        return formatter.format(priceCash.get(currency));
     }
 
 }

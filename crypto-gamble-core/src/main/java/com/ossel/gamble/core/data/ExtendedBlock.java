@@ -7,13 +7,12 @@ public class ExtendedBlock extends Block {
 
     public ExtendedBlock(String blockHash) {
         super(blockHash, -1);
-        String result = blockHash;
-        int position = result.length() - 1;
+        int position = blockHash.length() - 1;
         while (position > 0) {
-            char c = result.charAt(position);
+            char c = blockHash.charAt(position);
             int value = (int) c;
             if (value >= 48 && value <= 57) {// numeric
-                this.winner = Integer.parseInt(c + "");
+                this.winner = Integer.parseInt(String.valueOf(c));
                 break;
             }
             position--;

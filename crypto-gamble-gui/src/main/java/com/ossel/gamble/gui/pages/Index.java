@@ -56,6 +56,9 @@ public class Index {
     private Participant deposit;
 
     @Property
+    private Pot closedPot;
+
+    @Property
     @Persist
     private List<Participant> myDeposits;
 
@@ -69,6 +72,33 @@ public class Index {
 
     @Persist
     private CryptoNetwork network;
+
+    @Component
+    private Zone dataZone;
+
+    @Component
+    private Zone headerZone;
+
+    @InjectComponent
+    private Form addPayoutAddress;
+
+    @Property
+    private String payoutAddress;
+
+    @Property
+    private String pseudonym;
+
+    public Block onUpdateDataZone() {
+        log.debug("onUpdateDataZone");
+        // updateNewBlockAlerts();
+        return dataZone.getBody();
+    }
+
+    public Block onUpdateHeaderZone() {
+        log.debug("onUpdateHeaderZone");
+        updateNewBlockAlerts();
+        return headerZone.getBody();
+    }
 
     public CryptoNetwork getCryptoNetwork() {
         if (network == null) {
@@ -128,37 +158,9 @@ public class Index {
         return service.getQrCodeLink(depositAddress);
     }
 
-
-    @Component
-    private Zone dataZone;
-
-    public Block onUpdateDataZone() {
-        log.debug("onUpdateDataZone");
-        // updateNewBlockAlerts();
-        return dataZone.getBody();
-    }
-
-    @Component
-    private Zone headerZone;
-
-    public Block onUpdateHeaderZone() {
-        log.debug("onUpdateHeaderZone");
-        updateNewBlockAlerts();
-        return headerZone.getBody();
-    }
-
     public String getTime() {
         return DATE_FORMAT.format(new Date());
     }
-
-    @InjectComponent
-    private Form addPayoutAddress;
-
-    @Property
-    private String payoutAddress;
-
-    @Property
-    private String pseudonym;
 
     void onValidateFromAddPayoutAddress() {
         log.info(">onValidateFromAddPayoutAddressForm");
@@ -185,9 +187,6 @@ public class Index {
     public Pot getCurrentPot() {
         return service.getCurrentPot();
     }
-
-    @Property
-    private Pot closedPot;
 
     public List<Pot> getClosedPots() {
         List<Pot> pots = service.getClosedPots();
@@ -226,24 +225,7 @@ public class Index {
         return CryptoCurrency.ETHEREUM.equals(network.getCryptoCurrency());
     }
 
-    public String getSubmitLabel() {
-        return isEthereum() ? "Close" : "Sent!";
-    }
-
-
     public boolean isShowClosedPots() {
         return getClosedPots().size() > 0;
     }
-    //
-    // public String getPossibleBlockHashValues() {
-    // final String values = "0123456789ABCDEF??????????";
-    // return isEthereum() ? values.toLowerCase() : values;
-    // }
-    //
-    // public String getPossibleBlockHashPrefix() {
-    // return isEthereum() ? "0x0?0?0?0?0?0?0?" : "0000000000000";
-    // }
-
-
-
 }

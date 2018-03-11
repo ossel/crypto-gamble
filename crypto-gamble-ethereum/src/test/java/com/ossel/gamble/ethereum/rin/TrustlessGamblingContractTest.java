@@ -1,4 +1,4 @@
-package com.ossel.gamble.ethereum.misc;
+package com.ossel.gamble.ethereum.rin;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

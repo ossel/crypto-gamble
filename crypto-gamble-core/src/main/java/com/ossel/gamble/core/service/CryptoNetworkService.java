@@ -1,6 +1,5 @@
 package com.ossel.gamble.core.service;
 
-import java.util.Date;
 import java.util.List;
 import com.ossel.gamble.core.data.Participant;
 import com.ossel.gamble.core.data.Pot;
@@ -34,8 +33,6 @@ public interface CryptoNetworkService {
 
     public void updatePossibleParticipants(String depositAddress, String pseudonym,
             String payoutAddress);
-
-    public Date getLastParticipantJoinTime();
 
     public String getDisplayableAmount(long receivedAmount);
 

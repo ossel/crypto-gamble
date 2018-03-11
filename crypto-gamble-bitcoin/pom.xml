@@ -45,7 +45,7 @@
 						</goals>
 						<configuration>
 							<excludes>
-								<exclude>com/ossel/gamble/bitcoin/ejb/CryptoServiceTestnetEJB.class</exclude>
+								<exclude>com/ossel/gamble/bitcoin/ejb/BtcTestEJB.class</exclude>
 							</excludes>
 						</configuration>
 					</execution>
@@ -58,7 +58,7 @@
 						<configuration>
 						<classifier>testnet</classifier>
 						<excludes>
-							<exclude>com/ossel/gamble/bitcoin/ejb/CryptoServiceEJB.class</exclude>
+							<exclude>com/ossel/gamble/bitcoin/ejb/BtcMainEJB.class</exclude>
 						</excludes>
 						</configuration>
 					</execution>

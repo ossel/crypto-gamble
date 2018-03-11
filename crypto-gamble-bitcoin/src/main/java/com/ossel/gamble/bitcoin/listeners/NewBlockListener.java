@@ -1,98 +1,98 @@
 package com.ossel.gamble.bitcoin.listeners;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.bitcoinj.core.StoredBlock;
 import org.bitcoinj.core.VerificationException;
 import org.bitcoinj.core.listeners.NewBestBlockListener;
 import org.bitcoinj.store.BlockStoreException;
-import com.google.common.util.concurrent.Service.State;
-import com.ossel.gamble.bitcoin.services.BitcoinService;
+import com.ossel.gamble.bitcoin.services.AbstractBitcoinService;
+import com.ossel.gamble.bitcoin.threads.PayoutThread;
 import com.ossel.gamble.core.data.Block;
 import com.ossel.gamble.core.data.ExtendedBlock;
 import com.ossel.gamble.core.data.Participant;
 import com.ossel.gamble.core.data.Pot;
 import com.ossel.gamble.core.utils.CoreUtil;
+import com.ossel.gamble.core.utils.ReceiveTimeComparator;
 
 public class NewBlockListener implements NewBestBlockListener {
+
     private static final Logger log = Logger.getLogger(NewBlockListener.class);
 
-    BitcoinService service;
+    AbstractBitcoinService service;
 
-    public NewBlockListener(BitcoinService abstractBitcoinService) {
+    public NewBlockListener(AbstractBitcoinService abstractBitcoinService) {
         this.service = abstractBitcoinService;
-    }
-
-    public boolean ready() {
-        return service.getAppKit().state().equals(State.RUNNING);
     }
 
     @Override
     public void notifyNewBestBlock(StoredBlock block) throws VerificationException {
-        log.info("notifyNewBestBlock getHeight()=" + block.getHeight() + " hash="
+        log.info("New Block height = " + block.getHeight() + " hash = "
                 + block.getHeader().getHash().toString());
-
-        if (!ready()) {
-            log.info("appkit not ready yet!");
-            return;
-        }
-
-        List<Pot> pots = service.getClosedUnfinishedPots();
-        if (pots.size() == 0) {
-            log.info("Apparently no pot needs to be handled.");
-        }
-        for (Pot pot : pots) {
+        List<Pot> unfinishedPots = getUnfinishedPots(service.getClosedPots());
+        for (Pot pot : unfinishedPots) {
+            long potId = pot.getCreateTime().getTime();
             if (pot.getPayoutBlockHeight() > block.getHeight()) {
-                log.info("Pot " + pot.getCreateTime().getTime()
-                        + " can not be finished yet. Waiting for "
-                        + (pot.getPayoutBlockHeight() - block.getHeight()) + " more blocks");
+                log.info("Pot[" + potId + "] can not be finished yet. Waiting for "
+                        + (pot.getPayoutBlockHeight() - block.getHeight()) + " more blocks.");
+            } else if (block.getHeight() == pot.getPayoutBlockHeight()) {
+                log.info("Pot[" + potId + "] select temorary Winner.");
+                Block tmpPayoutBlock = new ExtendedBlock(block.getHeader().getHash().toString());
+                pot.setPayoutBlock(tmpPayoutBlock);
+                selectWinner(pot, tmpPayoutBlock);
             } else {
-                if (block.getHeight() == pot.getPayoutBlockHeight()) {
-                    log.info("Pot " + pot.getCreateTime().getTime() + " select tmp Winner.");
-                    Block b = new ExtendedBlock(block.getHeader().getHash().toString());
-                    pot.setPayoutBlock(b);
-                    CoreUtil.selectWinner(pot, b);
-                } else {
-                    log.info("Pot " + pot.getCreateTime().getTime() + " select final Winner.");
-                    log.info("back in time to payout block " + pot.getPayoutBlockHeight());
-                    StoredBlock prev = block;
-                    while (prev.getHeight() != pot.getPayoutBlockHeight()) {
-                        try {
-                            prev = prev.getPrev(service.getAppKit().store());
-                            if (prev == null) {
-                                log.warn("Couldn't go back in time previous block null.");
-                                break;
-                            }
-                            log.info("back in time " + prev.getHeight());
-                        } catch (BlockStoreException e) {
-                            log.error(e.getMessage(), e);
-                            prev = null;
-                            break;
-                        }
-                    }
-                    if (prev == null) {
-                        log.error("Something went wrong going back in time.");
-                    } else {
-                        log.info("Found correct block to select winner:"
-                                + (prev.getHeight() == pot.getPayoutBlockHeight()));
-                        if (prev.getHeight() == pot.getPayoutBlockHeight()) {
-                            Block b = new ExtendedBlock(block.getHeader().getHash().toString());
-                            pot.setPayoutBlock(b);
-                            Participant winner = CoreUtil.selectWinner(pot, b);
-                            log.info(winner.getDisplayName()
-                                    + " has been selected as a winner of pot " + pot.getId()
-                                    + " by the blockchain.");
-                            service.scheduledPayout(pot);
-                        }
-
-                    }
-                    log.info("found correct closing block");
+                log.info("Pot[" + potId + "] select final winner.");
+                try {
+                    StoredBlock correctBlock = getPastBlock(pot.getPayoutBlockHeight(), block);
+                    Block finalPayoutBlock =
+                            new ExtendedBlock(correctBlock.getHeader().getHash().toString());
+                    pot.setPayoutBlock(finalPayoutBlock);
+                    Participant winner = selectWinner(pot, finalPayoutBlock);
+                    log.info(winner.getDepositAddress() + " wins pot[" + potId + "].");
+                    if (!pot.isPayoutStarted())
+                        new PayoutThread(service, pot).start();
+                } catch (BlockStoreException e) {
+                    log.info("Couldn't select final winner of Pot[" + potId + "]:" + e.getMessage(),
+                            e);
                 }
-                pot.setState(CoreUtil.getPotState(pot));
             }
-            service.startPayoutBatch();
+            pot.setState(CoreUtil.getPotState(pot));
         }
-
     }
+
+    public static Participant selectWinner(Pot pot, Block finalPayoutBlock) {
+        List<Participant> participants = pot.getParticipants();
+        participants.sort(new ReceiveTimeComparator());
+        pot.setWinner(finalPayoutBlock.getWinner() % participants.size());
+        pot.setWinner(participants.get(pot.getWinnerIndex()));
+        return pot.getWinner();
+    }
+
+    public List<Pot> getUnfinishedPots(List<Pot> closedPots) {
+        List<Pot> unfinishedPots = new ArrayList<Pot>();
+        for (Pot pot : closedPots) {
+            if (!pot.payoutFinished()) {
+                unfinishedPots.add(pot);
+            }
+        }
+        return unfinishedPots;
+    }
+
+    /**
+     * goes back in the chain to find a specific block.
+     * 
+     * @param height the block height of the
+     * @param newBlock the of the longest block header chain
+     * @return the block with the correct block height
+     */
+    public StoredBlock getPastBlock(int height, StoredBlock newBlock) throws BlockStoreException {
+        StoredBlock prev = newBlock;
+        while (prev != null && prev.getHeight() != height) {
+            prev = prev.getPrev(service.getAppKit().store());
+        }
+        return prev;
+    }
+
 
 }

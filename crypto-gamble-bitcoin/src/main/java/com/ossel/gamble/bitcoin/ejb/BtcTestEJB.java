@@ -4,7 +4,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import org.bitcoinj.params.AbstractBitcoinNetParams;
 import org.bitcoinj.params.TestNet3Params;
-import com.ossel.gamble.bitcoin.services.BitcoinService;
+import com.ossel.gamble.bitcoin.services.AbstractBitcoinService;
 import com.ossel.gamble.core.data.enums.CryptoNetwork;
 
 /**
@@ -13,7 +13,7 @@ import com.ossel.gamble.core.data.enums.CryptoNetwork;
  */
 @Startup
 @Singleton
-public class BtcTestEJB extends BitcoinService {
+public class BtcTestEJB extends AbstractBitcoinService {
 
     @Override
     public AbstractBitcoinNetParams getNetworkParams() {
