@@ -32,7 +32,6 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
 
     private static final Logger log = Logger.getLogger(EthereumService.class);
 
-    private List<Participant> possibleParticipants = new ArrayList<Participant>();
 
     private Date lastParticipantJoin = new Date();
 
@@ -71,30 +70,6 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
 
     public Pot getCurrentPot() {
         return potService.getCurrentPot();
-    }
-
-    /**
-     * second step, triggered by the user
-     * 
-     * @param depositAddress
-     * @param pseudonym
-     * @param payoutAddress
-     */
-    public void updatePossibleParticipants(String depositAddress, String pseudonym,
-            String payoutAddress) {
-        // not used for etherem
-
-    }
-
-    /**
-     * first step, called by loading a new session page
-     * 
-     * @param depositAddress
-     */
-    public Participant addPossibleParticipant(String depositAddress) {
-        Participant p = new Participant(depositAddress, null);
-        possibleParticipants.add(p);
-        return p;
     }
 
     public String getCurrentBlockHash() {
@@ -159,7 +134,7 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
      * In case of ethereum this method returns always the smart contract address.
      */
     @Override
-    public String getFreshDepositAddress() {
+    public String getDepositAddress() {
         return UserConfiguration.CONTRACT_ADDRESS;
     }
 
@@ -239,6 +214,11 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
     @Override
     public long getExpectedBettingAmount() {
         return UserConfiguration.CONTRACT_EXPECTED_BETTING_AMOUNT;
+    }
+
+    public List<Participant> getPossibleParticipants() {
+        // not used
+        return new ArrayList<>();
     }
 
 }

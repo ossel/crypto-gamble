@@ -152,37 +152,7 @@ public abstract class DashService extends AbstractCryptoNetworkService {
         return currentPot;
     }
 
-    /**
-     * second step, triggered by the user
-     * 
-     * @param depositAddress
-     * @param pseudonym
-     * @param payoutAddress
-     */
-    public void updatePossibleParticipants(String depositAddress, String pseudonym,
-            String payoutAddress) {
-        for (Participant p : possibleParticipants) {
-            if (p.getDepositAddress().equals(depositAddress)) {
-                if (payoutAddress != null && !payoutAddress.isEmpty())
-                    p.setPayoutAddress(payoutAddress);
-                p.setPseudonym(pseudonym);
-            }
-        }
-
-    }
-
-    /**
-     * first step, called by loading a new session page
-     * 
-     * @param depositAddress
-     */
-    public Participant addPossibleParticipant(String depositAddress) {
-        Participant p = new Participant(depositAddress, null);
-        possibleParticipants.add(p);
-        return p;
-    }
-
-    public String getFreshDepositAddress() {
+    public String getDepositAddress() {
         return appKit.wallet().freshAddress(KeyPurpose.RECEIVE_FUNDS).toString();
     }
 

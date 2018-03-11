@@ -19,7 +19,9 @@ public interface CryptoNetworkService {
 
     public int getCurrentBlockHeight();
 
-    public String getFreshDepositAddress();
+    public String getDepositAddress();
+
+    public List<Participant> getPossibleParticipants();
 
     public boolean isValidAddress(String depositAddress);
 
@@ -28,11 +30,6 @@ public interface CryptoNetworkService {
     public Pot getPotById(long potId);
 
     public List<Pot> getClosedPots();
-
-    public Participant addPossibleParticipant(String depositAddress);
-
-    public void updatePossibleParticipants(String depositAddress, String pseudonym,
-            String payoutAddress);
 
     public String getDisplayableAmount(long receivedAmount);
 

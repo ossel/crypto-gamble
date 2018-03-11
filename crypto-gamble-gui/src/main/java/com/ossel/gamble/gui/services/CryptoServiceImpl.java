@@ -94,8 +94,8 @@ public class CryptoServiceImpl implements CryptoNetworkService {
     }
 
     @Override
-    public String getFreshDepositAddress() {
-        return lookupService().getFreshDepositAddress();
+    public String getDepositAddress() {
+        return lookupService().getDepositAddress();
     }
 
     @Override
@@ -119,17 +119,6 @@ public class CryptoServiceImpl implements CryptoNetworkService {
     }
 
     @Override
-    public Participant addPossibleParticipant(String depositAddress) {
-        return lookupService().addPossibleParticipant(depositAddress);
-    }
-
-    @Override
-    public void updatePossibleParticipants(String depositAddress, String pseudonym,
-            String payoutAddress) {
-        lookupService().updatePossibleParticipants(depositAddress, pseudonym, payoutAddress);
-    }
-
-    @Override
     public String getDisplayableAmount(long receivedAmount) {
         return lookupService().getDisplayableAmount(receivedAmount);
     }
@@ -147,6 +136,11 @@ public class CryptoServiceImpl implements CryptoNetworkService {
     @Override
     public String getSmartContractABI() {
         return lookupService().getSmartContractABI();
+    }
+
+    @Override
+    public List<Participant> getPossibleParticipants() {
+        return lookupService().getPossibleParticipants();
     }
 
 }

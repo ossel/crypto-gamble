@@ -88,38 +88,11 @@ public abstract class AbstractBitcoinService extends AbstractCryptoNetworkServic
         return currentPot;
     }
 
-    /**
-     * second step, triggered by the user
-     * 
-     * @param depositAddress
-     * @param pseudonym
-     * @param payoutAddress
-     */
-    public void updatePossibleParticipants(String depositAddress, String pseudonym,
-            String payoutAddress) {
-        for (Participant p : possibleParticipants) {
-            if (p.getDepositAddress().equals(depositAddress)) {
-                if (payoutAddress != null && !payoutAddress.isEmpty())
-                    p.setPayoutAddress(payoutAddress);
-                p.setPseudonym(pseudonym);
-            }
-        }
-
-    }
-
-    /**
-     * first step, called by loading a new session page
-     * 
-     * @param depositAddress
-     */
-    public Participant addPossibleParticipant(String depositAddress) {
-        Participant p = new Participant(depositAddress, null);
-        possibleParticipants.add(p);
-        return p;
-    }
-
-    public String getFreshDepositAddress() {
-        return bitcoinAppKit.wallet().freshAddress(KeyPurpose.RECEIVE_FUNDS).toString();
+    public String getDepositAddress() {
+        String depositAddress =
+                bitcoinAppKit.wallet().freshAddress(KeyPurpose.RECEIVE_FUNDS).toString();
+        possibleParticipants.add(new Participant(depositAddress, null));
+        return depositAddress;
     }
 
     public List<Participant> getPossibleParticipants() {

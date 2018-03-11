@@ -177,7 +177,12 @@ public class Index {
     Object onSuccessFromAddPayoutAddress() {
         log.info("onSuccessFromAddPayoutAddressForm!");
         showPaymentForm = false;
-        service.updatePossibleParticipants(depositAddress, pseudonym, payoutAddress);
+        for (Participant participant : service.getPossibleParticipants()) {
+            if (participant.getDepositAddress().equals(depositAddress)) {
+                participant.setPseudonym(pseudonym);
+                participant.setPayoutAddress(payoutAddress);
+            }
+        }
         alertManager.success(
                 "You get added to the current pot soon as your transaction gets included into the blockchain.");
         depositAddress = null; // generate new one
@@ -207,9 +212,12 @@ public class Index {
     void onActionFromJoinPot() {
         showPaymentForm = true;
         if (depositAddress == null) {
-            depositAddress = service.getFreshDepositAddress();
-            Participant p = service.addPossibleParticipant(depositAddress);
-            myDeposits.add(p);
+            depositAddress = service.getDepositAddress();
+            for (Participant participant : service.getPossibleParticipants()) {
+                if (participant.getDepositAddress().equals(depositAddress)) {
+                    myDeposits.add(participant);
+                }
+            }
         }
     }
 
