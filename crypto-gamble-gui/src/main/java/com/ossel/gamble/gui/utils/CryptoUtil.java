@@ -17,7 +17,7 @@ public class CryptoUtil {
         DefaultKeyedValues values = new DefaultKeyedValues();
         int i = 0;
         for (Participant participant : pot.getParticipants()) {
-            values.addValue(" " + i + " ", pot.getExpectedBettingamount());
+            values.addValue(" " + i + " ", pot.getExpectedBettingAmount());
             // log.debug("Adding " + "(" + i + ") " + participant.getDisplayName() + " to pie
             // chart");
             i++;
@@ -27,7 +27,7 @@ public class CryptoUtil {
         // log.debug("adding " + nbrOfOpenSlots + " open slot to the pie chart");
         String label = Pot.LABEL_OPEN_SLOT;
         for (int j = 1; j <= nbrOfOpenSlots; j++) {
-            values.addValue(label + j, pot.getExpectedBettingamount());
+            values.addValue(label + j, pot.getExpectedBettingAmount());
         }
 
         return new DefaultPieDataset(values);

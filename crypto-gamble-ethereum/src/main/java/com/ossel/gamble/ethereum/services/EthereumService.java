@@ -121,7 +121,7 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
     public String getQrCodeLink(String depositAddress) {
         return "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=ethereum:"
                 + depositAddress + "?amount="
-                + getDisplayableAmount(getCurrentPot().getExpectedBettingamount()).replace(" ETH",
+                + getDisplayableAmount(getCurrentPot().getExpectedBettingAmount()).replace(" ETH",
                         "")
                 + "&message=gambling";
     }

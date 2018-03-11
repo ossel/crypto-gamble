@@ -32,7 +32,7 @@ public class PayoutThread extends Thread {
             Address winnerAddress = new Address(bitcoinService.getNetworkParams(),
                     pot.getWinner().getPayoutAddress());
             Coin potValue = Coin.SATOSHI
-                    .multiply(pot.getParticipants().size() * pot.getExpectedBettingamount());
+                    .multiply(pot.getParticipants().size() * pot.getExpectedBettingAmount());
             Wallet.SendResult result = bitcoinService.getAppKit().wallet()
                     .sendCoins(bitcoinService.getAppKit().peerGroup(), winnerAddress, potValue);
             String txnId = result.tx.getHash().toString();

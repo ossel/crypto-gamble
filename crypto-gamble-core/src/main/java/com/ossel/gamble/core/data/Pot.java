@@ -68,7 +68,7 @@ public class Pot {
         this.participants = participants;
     }
 
-    public long getExpectedBettingamount() {
+    public long getExpectedBettingAmount() {
         return expectedBettingAmount;
     }
 

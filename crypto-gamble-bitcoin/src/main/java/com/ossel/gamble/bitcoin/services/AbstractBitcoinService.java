@@ -1,5 +1,6 @@
 package com.ossel.gamble.bitcoin.services;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +8,7 @@ import javax.annotation.PostConstruct;
 import org.apache.log4j.Logger;
 import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.Coin;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.AbstractBitcoinNetParams;
 import org.bitcoinj.wallet.KeyChain.KeyPurpose;
@@ -49,9 +51,10 @@ public abstract class AbstractBitcoinService extends AbstractCryptoNetworkServic
         log.info("#### Start Bitcoin SPV Node  ####");
         currentPot = new Pot(getCryptoNetwork().getCryptoCurrency(), 2, EXPECTED_BETTING_AMOUNT);
         currentPot.setState(CoreUtil.getPotState(currentPot));
-        log.info("Bitcoin wallet directory = " + CoreUtil.getWalletDirectory().getAbsolutePath());
-        bitcoinAppKit = new WalletAppKit(getNetworkParams(), CoreUtil.getWalletDirectory(),
-                WALLET_FILE_NAME) {
+        File walletDir = CoreUtil.getWalletDirectory();
+        log.info("Btc wallet dir = " + walletDir.getAbsolutePath());
+        NetworkParameters params = getNetworkParams();
+        bitcoinAppKit = new WalletAppKit(params, walletDir, WALLET_FILE_NAME) {
             @Override
             protected void onSetupCompleted() {
                 log.info("#### Bitcoin SPV Node [" + bitcoinAppKit.state() + "] ####");
@@ -165,7 +168,7 @@ public abstract class AbstractBitcoinService extends AbstractCryptoNetworkServic
         Participant bankParticipant =
                 new Participant("No deposit needed.", "No payout address needed.");
         bankParticipant.setPseudonym(getBankPseudonym());
-        bankParticipant.setReceivedAmount(currentPot.getExpectedBettingamount());
+        bankParticipant.setReceivedAmount(currentPot.getExpectedBettingAmount());
         bankParticipant.setBankParticipant(true);
         log.info("Add bank participant " + bankParticipant + " to the current pot.");
         // TODO check paymentReceived();
@@ -189,7 +192,7 @@ public abstract class AbstractBitcoinService extends AbstractCryptoNetworkServic
     @Override
     public String getQrCodeLink(String depositAddress) {
         return "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=bitcoin:" + depositAddress
-                + "?amount=" + getDisplayableAmount(getCurrentPot().getExpectedBettingamount())
+                + "?amount=" + getDisplayableAmount(getCurrentPot().getExpectedBettingAmount())
                         .replace(" BTC", "")
                 + "&message=gambling";
     }

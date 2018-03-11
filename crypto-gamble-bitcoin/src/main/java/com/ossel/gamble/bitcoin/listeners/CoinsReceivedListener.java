@@ -4,9 +4,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutput;
-import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.wallet.Wallet;
 import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
 import com.ossel.gamble.bitcoin.services.AbstractBitcoinService;
@@ -26,26 +26,32 @@ public class CoinsReceivedListener implements WalletCoinsReceivedEventListener {
 
     @Override
     public void onCoinsReceived(Wallet wallet, Transaction txn, Coin prevBalance, Coin newBalance) {
-        Coin value = txn.getValueSentToMe(wallet);
-        log.info("Received " + value.toFriendlyString() + " from transaction: " + txn.getHash());
         log.debug("Transaction details: " + txn.toString());
-        List<Participant> possibleParticipants = service.getPossibleParticipants();
-        WalletAppKit appkit = service.getAppKit();
+        Coin value = txn.getValueSentToMe(wallet);
+        Pot currentPot = service.getCurrentPot();
+        if (currentPot.getExpectedBettingAmount() > value.getValue()) {
+            log.warn("Player did not pay enough.");
+            return;
+        }
+        List<Participant> participants = service.getPossibleParticipants();
+        NetworkParameters params = service.getAppKit().params();
         for (TransactionOutput txnOutput : txn.getOutputs()) {
-            for (Participant participant : possibleParticipants) {
+            Address a = txnOutput.getAddressFromP2PKHScript(params);
+            if (a == null) {
+                a = txnOutput.getAddressFromP2SH(params);
+            }
+            String address = a.toString();
+            for (Participant participant : participants) {
                 String depositAddress = participant.getDepositAddress();
-                Address address = txnOutput.getAddressFromP2PKHScript(appkit.params());
-                if (address == null) {
-                    address = txnOutput.getAddressFromP2SH(appkit.params());
-                }
-                if (depositAddress != null && address != null
-                        && depositAddress.equals(address.toString())) {
+                if (depositAddress != null && a != null && depositAddress.equals(address)) {
+
                     log.info("Received " + value.toFriendlyString() + " coins from "
                             + participant.toString());
                     if (participant.hasPayed()) {
                         log.warn(participant
                                 + " had already payed. Maybe he used an address twice.");
                     }
+
                     participant.setReceivedAmount(value.getValue());
                     String fromAddress = txn.getInput(0).getFromAddress().toString();
                     participant.setPayoutAddress(fromAddress);
@@ -53,10 +59,9 @@ public class CoinsReceivedListener implements WalletCoinsReceivedEventListener {
                             new TxnConfidenceListener(service, txn, participant));
                 }
             }
-
         }
-        Pot currentPot = service.getCurrentPot();
         currentPot.setState(CoreUtil.getPotState(currentPot));
     }
+
 
 }

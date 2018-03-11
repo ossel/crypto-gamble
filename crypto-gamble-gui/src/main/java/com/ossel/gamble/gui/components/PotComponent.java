@@ -90,7 +90,7 @@ public class PotComponent {
         } else {
             log.info("found pot " + potId + " in memory! " + pot.getParticipants());
             pieDataset = CryptoUtil.getPieDataset(pot);
-            chartTitle = service.getDisplayableAmount(pot.getExpectedBettingamount()) + " / slot";
+            chartTitle = service.getDisplayableAmount(pot.getExpectedBettingAmount()) + " / slot";
         }
         PiePlot plot = new PiePlot(pieDataset);
         String label = Pot.LABEL_OPEN_SLOT;

@@ -249,7 +249,7 @@ public abstract class DashService extends AbstractCryptoNetworkService {
         Participant bankParticipant =
                 new Participant("No deposit needed.", "No payout address needed.");
         bankParticipant.setPseudonym(getBankPseudonym());
-        bankParticipant.setReceivedAmount(currentPot.getExpectedBettingamount());
+        bankParticipant.setReceivedAmount(currentPot.getExpectedBettingAmount());
         bankParticipant.setBankParticipant(true);
         log.info("Add bank participant " + bankParticipant + " to the current pot.");
         paymentReceived();
@@ -280,7 +280,7 @@ public abstract class DashService extends AbstractCryptoNetworkService {
     @Override
     public String getQrCodeLink(String depositAddress) {
         return "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=dash:" + depositAddress
-                + "?amount=" + getDisplayableAmount(getCurrentPot().getExpectedBettingamount())
+                + "?amount=" + getDisplayableAmount(getCurrentPot().getExpectedBettingAmount())
                         .replace(" DASH", "")
                 + "&message=trustless-gambling";
     }
