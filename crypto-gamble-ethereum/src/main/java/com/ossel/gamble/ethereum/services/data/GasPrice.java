@@ -23,7 +23,7 @@ public class GasPrice extends ExpiryCacheValue {
     private BigInteger fetchGasPrice() {
         EthGasPrice ethGasPrice;
         try {
-            ethGasPrice = getService().ethGasPrice().send();
+            ethGasPrice = getWeb3jService().ethGasPrice().send();
             return ethGasPrice.getGasPrice();
         } catch (IOException e) {
             e.printStackTrace();

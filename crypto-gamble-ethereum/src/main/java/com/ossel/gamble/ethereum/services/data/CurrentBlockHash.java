@@ -15,6 +15,10 @@ public class CurrentBlockHash extends ExpiryCacheValue {
         this.blockHeight = blockHeight;
     }
 
+    /**
+     * refresh if cache value expired. Called automatically by the ExpiryCacheValue.getValue()
+     * method.
+     */
     @Override
     protected void refresh() {
         String blockHash = fetchCurrentBlockHash();
@@ -24,12 +28,10 @@ public class CurrentBlockHash extends ExpiryCacheValue {
 
     private String fetchCurrentBlockHash() {
         EthBlock ethBlock = null;
+        DefaultBlockParameterNumber number =
+                new DefaultBlockParameterNumber(blockHeight.getValue());;
         try {
-            ethBlock =
-                    getService()
-                            .ethGetBlockByNumber(
-                                    new DefaultBlockParameterNumber(blockHeight.getValue()), false)
-                            .send();
+            ethBlock = getWeb3jService().ethGetBlockByNumber(number, false).send();
         } catch (IOException e) {
             e.printStackTrace();
         }

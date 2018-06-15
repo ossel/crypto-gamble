@@ -72,7 +72,7 @@ public class Pot {
         return expectedBettingAmount;
     }
 
-    public void setExpectedBettingamount(long expectedBettingamount) {
+    public void setExpectedBettingAmount(long expectedBettingamount) {
         this.expectedBettingAmount = expectedBettingamount;
     }
 

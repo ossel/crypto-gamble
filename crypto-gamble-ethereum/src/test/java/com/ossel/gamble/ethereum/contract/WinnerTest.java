@@ -22,4 +22,5 @@ public class WinnerTest extends RinkebyTestcase {
         System.out.println("Winner = " + x.intValue());
 
     }
+
 }

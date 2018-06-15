@@ -7,11 +7,11 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.infura.InfuraHttpService;
 import com.ossel.gamble.core.data.enums.CryptoNetwork;
 import com.ossel.gamble.ethereum.UserConfiguration;
-import com.ossel.gamble.ethereum.services.EthereumService;
+import com.ossel.gamble.ethereum.services.AbstractEthereumService;
 
 @Startup
 @Singleton
-public class EthRopstenEJB extends EthereumService {
+public class EthRopstenEJB extends AbstractEthereumService {
 
     @Override
     protected Web3j getWeb3jService() {

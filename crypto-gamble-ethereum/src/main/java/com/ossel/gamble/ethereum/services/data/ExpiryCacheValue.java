@@ -23,7 +23,7 @@ public abstract class ExpiryCacheValue {
     }
 
 
-    public Web3j getService() {
+    public Web3j getWeb3jService() {
         return web3j;
     }
 

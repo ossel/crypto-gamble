@@ -21,7 +21,7 @@ public class CurrentBlockHeight extends ExpiryCacheValue {
 
     private BigInteger fetchCurrentBlockHeight() {
         try {
-            EthBlockNumber ethBlockNumber = getService().ethBlockNumber().send();
+            EthBlockNumber ethBlockNumber = getWeb3jService().ethBlockNumber().send();
             return ethBlockNumber.getBlockNumber();
         } catch (IOException e) {
             e.printStackTrace();

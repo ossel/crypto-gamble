@@ -41,6 +41,7 @@ public class CoinsReceivedListener implements WalletCoinsReceivedEventListener {
                 a = txnOutput.getAddressFromP2SH(params);
             }
             String address = a.toString();
+            log.info("Coins received on address: " + address);
             for (Participant participant : participants) {
                 String depositAddress = participant.getDepositAddress();
                 if (depositAddress != null && a != null && depositAddress.equals(address)) {
@@ -54,6 +55,7 @@ public class CoinsReceivedListener implements WalletCoinsReceivedEventListener {
 
                     participant.setReceivedAmount(value.getValue());
                     String fromAddress = txn.getInput(0).getFromAddress().toString();
+                    log.info("Payout address: " + fromAddress);
                     participant.setPayoutAddress(fromAddress);
                     wallet.addTransactionConfidenceEventListener(
                             new TxnConfidenceListener(service, txn, participant));

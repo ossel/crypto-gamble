@@ -1,4 +1,5 @@
 package com.ossel.gamble.ethereum;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -12,7 +13,6 @@ import org.web3j.protocol.core.methods.response.EthEstimateGas;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.infura.InfuraHttpService;
-import com.ossel.gamble.ethereum.UserConfiguration;
 
 public abstract class RinkebyTestcase {
 

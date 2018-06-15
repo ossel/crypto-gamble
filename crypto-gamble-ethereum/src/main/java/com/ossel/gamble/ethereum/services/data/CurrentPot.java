@@ -18,9 +18,9 @@ import com.ossel.gamble.core.utils.CoreUtil;
 import com.ossel.gamble.ethereum.UserConfiguration;
 import com.ossel.gamble.ethereum.generated.TrustlessGambling;
 
-public class PotService extends ExpiryCacheValue {
+public class CurrentPot extends ExpiryCacheValue {
 
-    private static final Logger log = Logger.getLogger(PotService.class);
+    private static final Logger log = Logger.getLogger(CurrentPot.class);
 
     private static final String NA = "not accessible";
 
@@ -30,7 +30,7 @@ public class PotService extends ExpiryCacheValue {
 
     private List<Pot> closedPots;
 
-    public PotService(Web3j web3j, Credentials credentials, GasPrice gasPrice,
+    public CurrentPot(Web3j web3j, Credentials credentials, GasPrice gasPrice,
             CurrentBlockHeight currentBlockHeight, String contractAddress) {
         super(web3j, credentials, 10 * SECOND);
         this.gasPrice = gasPrice;
@@ -46,7 +46,7 @@ public class PotService extends ExpiryCacheValue {
     @Override
     protected void refresh() {
         log.info("### Refresh current pot[" + contractAddress + "] ###");
-        TrustlessGambling contract = TrustlessGambling.load(contractAddress, getService(),
+        TrustlessGambling contract = TrustlessGambling.load(contractAddress, getWeb3jService(),
                 getCredentials(), gasPrice.getValue(),
                 EMPTY_CONTRACT_CREATION_GAS.multiply(BigInteger.valueOf(100)));
         try {
@@ -156,7 +156,7 @@ public class PotService extends ExpiryCacheValue {
     private String fetchBlockHash(int closingBlockHeigth) {
         EthBlock ethBlock = null;
         try {
-            ethBlock = getService().ethGetBlockByNumber(
+            ethBlock = getWeb3jService().ethGetBlockByNumber(
                     new DefaultBlockParameterNumber(BigInteger.valueOf(closingBlockHeigth)), false)
                     .send();
         } catch (IOException e) {

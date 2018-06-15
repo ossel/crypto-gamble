@@ -180,11 +180,11 @@ public class Index {
         for (Participant participant : service.getPossibleParticipants()) {
             if (participant.getDepositAddress().equals(depositAddress)) {
                 participant.setPseudonym(pseudonym);
-                participant.setPayoutAddress(payoutAddress);
+                // participant.setPayoutAddress(payoutAddress);
             }
         }
         alertManager.success(
-                "You get added to the current pot soon as your transaction gets included into the blockchain.");
+                "You get added to the current pot soon as your transaction gets included in the blockchain.");
         depositAddress = null; // generate new one
         return null;
     }

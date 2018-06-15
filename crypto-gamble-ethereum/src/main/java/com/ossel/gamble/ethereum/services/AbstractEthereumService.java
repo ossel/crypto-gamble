@@ -3,7 +3,6 @@ package com.ossel.gamble.ethereum.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.apache.log4j.Logger;
@@ -25,15 +24,14 @@ import com.ossel.gamble.core.utils.CoreUtil;
 import com.ossel.gamble.ethereum.UserConfiguration;
 import com.ossel.gamble.ethereum.services.data.CurrentBlockHash;
 import com.ossel.gamble.ethereum.services.data.CurrentBlockHeight;
+import com.ossel.gamble.ethereum.services.data.CurrentPot;
 import com.ossel.gamble.ethereum.services.data.GasPrice;
-import com.ossel.gamble.ethereum.services.data.PotService;
 
-public abstract class EthereumService extends AbstractCryptoNetworkService {
+public abstract class AbstractEthereumService extends AbstractCryptoNetworkService {
 
-    private static final Logger log = Logger.getLogger(EthereumService.class);
+    private static final Logger log = Logger.getLogger(AbstractEthereumService.class);
 
 
-    private Date lastParticipantJoin = new Date();
 
     private String walletAddress;
 
@@ -43,46 +41,46 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
     // # Expiry cache values #
     // #######################
 
-    private PotService potService;
+    private CurrentPot currentPotCache;
 
-    private GasPrice gasPrice;
+    private GasPrice gasPriceCache;
 
-    private CurrentBlockHash blockHash;
+    private CurrentBlockHash blockHashCache;
 
-    private CurrentBlockHeight blockHight;
+    private CurrentBlockHeight blockHightCache;
 
     @PostConstruct
-    private void start() {
+    private void initialize() {
         log.info("#### start " + getClass().getSimpleName() + " network service ####");
-        blockHight = new CurrentBlockHeight(getWeb3jService(), getCredentials());
-        log.info("blockHight=" + blockHight.getValue().intValue());
-        blockHash = new CurrentBlockHash(getWeb3jService(), getCredentials(), blockHight);
-        log.info("blockHash=" + blockHash.getValue());
-        gasPrice = new GasPrice(getWeb3jService(), getCredentials());
-        log.info("gasPrice=" + gasPrice.getValue().intValue());
-        potService = new PotService(getWeb3jService(), getCredentials(), gasPrice, blockHight,
-                UserConfiguration.CONTRACT_ADDRESS);
-        log.info("currentPot=" + potService.getValue().toString());
+        blockHightCache = new CurrentBlockHeight(getWeb3jService(), getCredentials());
+        log.info("blockHight=" + blockHightCache.getValue().intValue());
+        blockHashCache = new CurrentBlockHash(getWeb3jService(), getCredentials(), blockHightCache);
+        log.info("blockHash=" + blockHashCache.getValue());
+        gasPriceCache = new GasPrice(getWeb3jService(), getCredentials());
+        log.info("gasPrice=" + gasPriceCache.getValue().intValue());
+        currentPotCache = new CurrentPot(getWeb3jService(), getCredentials(), gasPriceCache,
+                blockHightCache, UserConfiguration.CONTRACT_ADDRESS);
+        log.info("currentPot=" + currentPotCache.getValue().toString());
     }
 
     protected abstract Web3j getWeb3jService();
 
 
     public Pot getCurrentPot() {
-        return potService.getCurrentPot();
+        return currentPotCache.getCurrentPot();
     }
 
     public String getCurrentBlockHash() {
-        return blockHash.getValue();
+        return blockHashCache.getValue();
     }
 
     public int getCurrentBlockHeight() {
-        return blockHight.getValue().intValue();
+        return blockHightCache.getValue().intValue();
     }
 
 
     public List<Pot> getClosedPots() {
-        return potService.getClosedPots();
+        return currentPotCache.getClosedPots();
     }
 
     /**
@@ -91,25 +89,21 @@ public abstract class EthereumService extends AbstractCryptoNetworkService {
      * @return null if not found
      */
     public Pot getPotById(long potId) {
-        if (potService.getCurrentPot().getCreateTime().getTime() == potId) {
-            return potService.getCurrentPot();
+        if (currentPotCache.getCurrentPot().getCreateTime().getTime() == potId) {
+            return currentPotCache.getCurrentPot();
         } else {
-            for (Pot p : potService.getClosedPots()) {
+            for (Pot p : currentPotCache.getClosedPots()) {
                 if (p.getCreateTime().getTime() == potId) {
                     return p;
                 }
             }
         }
         log.warn("Pot couldn't be found. Return current pot.");
-        return potService.getCurrentPot();
+        return currentPotCache.getCurrentPot();
     }
 
     public boolean isValidAddress(String depositAddress) {
         return true;
-    }
-
-    public Date getLastParticipantJoinTime() {
-        return lastParticipantJoin;
     }
 
     @Override
